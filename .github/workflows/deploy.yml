@@ -4,11 +4,11 @@ name: Deploy Angular App to GitHub Pages
 on:
   push:
     branches:
-      - master      # или ваша основная ветка
+      - master      # ваша default-ветка
   workflow_dispatch: {}
 
 permissions:
-  contents: write  # даём GITHUB_TOKEN право пушить в репо
+  contents: write  # чтобы GITHUB_TOKEN мог пушить в репо
 
 jobs:
   build-and-deploy:
@@ -28,29 +28,32 @@ jobs:
         run: npm ci --no-audit
 
       - name: Build production bundle
+        # скрипт build:gh теперь делает ng build --configuration=production
         run: npm run build:gh
-        # убедимся, что dist/mapbox-track/browser с index.html существует
+
       - name: Verify build output
         run: |
-          echo "Contents of dist/mapbox-track/browser:"
-          ls -R dist/mapbox-track/browser
-          if [ ! -f "dist/mapbox-track/browser/index.html" ]; then
-            echo "❌ Error: index.html not found in dist/mapbox-track/browser!"
+          echo "Contents of dist/mapbox-track:"
+          ls -R dist/mapbox-track
+          if [ ! -f "dist/mapbox-track/index.html" ]; then
+            echo "❌ Error: index.html not found in dist/mapbox-track!"
             exit 1
           fi
 
       - name: Prepare SPA 404 fallback
         run: |
-          cd dist/mapbox-track/browser
-          # генерируем 404.html, чтобы client-side роутинг не ломал Pages
+          cd dist/mapbox-track
           cat > 404.html << 'EOF'
           <!DOCTYPE html>
           <html>
             <head>
               <meta charset="utf-8" />
               <script>
-                // Redirect any SPA route back to index.html
-                window.location.replace("/mapbox-track/");
+                // При заходе на любую вложенную ссылку
+                // перенаправляем на корень, Angular сам прочитает URL
+                const path = window.location.pathname;
+                sessionStorage.setItem('redirect', path);
+                location.replace('/mapbox-track/');
               </script>
             </head>
             <body>
@@ -63,7 +66,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/mapbox-track/browser
+          publish_dir: ./dist/mapbox-track
           publish_branch: gh-pages
           enable_jekyll: false
           keep_files: false
