@@ -1,34 +1,24 @@
 name: Deploy Angular App to GitHub Pages
 
-# даём прав на запись в contents (код) репо
-permissions:
-  contents: write
-
 on:
   push:
-    branches:
-      - master    # или ваша default-ветка
+    branches: [ master ]   # ваша default-ветка
+
+permissions:
+  contents: write          # даём GITHUB_TOKEN право пушить в repo
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        # persist-credentials по умолчанию = true, и токен сохранится
-        # with:
-        #   persist-credentials: true
+      - uses: actions/checkout@v3
 
-      - name: Use Node.js 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - uses: actions/setup-node@v3
+        with: { node-version: '18' }
 
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
 
-      - name: Build production bundle
-        run: npm run build -- --configuration production --base-href=/mapbox-track/
+      - run: npm run build -- --configuration production --base-href=/mapbox-track/
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
