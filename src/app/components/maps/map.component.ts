@@ -111,7 +111,7 @@ export class MapComponent implements OnDestroy, OnInit {
         { name: 'get', url: 'assets/icons/get.png' }
     ];
 
-    public modelScenegraphUrl = '/assets/models/test.glb';
+    public modelScenegraphUrl = 'assets/models/test.glb';
     public isMoving = false;
     public isMapLoad = false;
     public markers: GeoJSON.FeatureCollection<GeoJSON.Point>;
