@@ -1,11 +1,11 @@
-name: Deploy Angular App to GitHub Pages
+name: Deploy Angular Universal prerender to GitHub Pages
 
 on:
   push:
-    branches: [ master ]   # ваша default-ветка
+    branches: [ master ]
 
 permissions:
-  contents: write          # даём GITHUB_TOKEN право пушить в repo
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -18,11 +18,12 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build -- --configuration production --base-href=/mapbox-track/
+      # Генерируем prerendered-сайт
+      - run: npm run prerender   # или `ng run mapbox-track:prerender`
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/mapbox-track
+          publish_dir: ./dist/mapbox-track/browser
           publish_branch: gh-pages
