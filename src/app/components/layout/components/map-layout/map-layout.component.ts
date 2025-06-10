@@ -20,7 +20,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 })
 export class MapLayoutComponent implements AfterViewInit, OnInit, OnDestroy {
 
-    public showProgress: boolean = true;
+    public showProgress: boolean = false;
     public sidenavViewContent: string;
     public toolbarActions: any[];
     public excludedToolbarIds = ['filter', 'export', 'settings'];
@@ -57,7 +57,7 @@ export class MapLayoutComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private _watchForLoadProgress(): void {
         this._loadProgressService.inProgress
-            .pipe(delay(0))
+            //.pipe(delay(0))
             .subscribe((progress: boolean) => {
                 this.showProgress = progress;
             });

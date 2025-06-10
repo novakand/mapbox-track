@@ -62,8 +62,8 @@ export class VehicleService {
         }).pipe(
             map(response => response),
             catchError(error => error),
-            retry({ delay: 15000 }),
-            isRepeat ? repeat({ delay: 15000 }) : identity,
+            retry({ delay: 20000 }),
+            isRepeat ? repeat({ delay: 20000 }) : identity,
             tap(data => this.track$.next({ vehicleId: id, data, isRepeat }))
         );
     }

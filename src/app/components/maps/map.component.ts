@@ -45,8 +45,6 @@ import { TripsLayerDirective } from './components/deck/directives/trips-layer.di
         MapLegendControlComponent,
         DeckDirective,
         ScenegraphLayerDirective,
-        LineLayerDirective,
-        TripsLayerDirective,
         PopupComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -225,25 +223,10 @@ export class MapComponent implements OnDestroy, OnInit {
         this.selectedPoint = null;
     }
 
-
-
-// Вынесем повторяющуюся логику в метод
-private _initializeTrack(p: any): void {
-  if (!p.isRepeat) {
-    this._stopPlayback();
-  }
-  const features = p.data.features as Feature<Point, GeoJsonProperties>[];
-  this.trackData = features;
-  this.trackTimestamps = features.map(f => f.properties!['timestamp'] as string);
-  this.playbackIdx = p.isRepeat ? features.length - 1 : 0;
-  this.mapService.currentTrackPoint$.next(features[this.playbackIdx]);
-  this._setupFlags(p.vehicleId, p.isRepeat);
-}
-
-
     private _watchForTrackChanges(): void {
         this._vehicleService.track$
             .pipe(
+                filter(Boolean),
                 takeUntil(this.destroy$),
                 delay(3000),
                 tap(p => {

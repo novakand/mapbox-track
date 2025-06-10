@@ -205,7 +205,6 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getById();
        this._getTrack$.next(null)
-       this._loadProgressService.show(1);
         
     }
 
