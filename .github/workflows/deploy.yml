@@ -31,6 +31,11 @@ jobs:
         # скрипт build:gh теперь делает ng build --configuration=production
         run: npm run build:gh
 
+         - name: Find index.html
+        run: |
+          echo "Looking for index.html under dist/mapbox-track…"
+          find dist/mapbox-track -type f -name index.html || echo "❌ index.html not found"
+
       - name: Verify build output
         run: |
           echo "Contents of dist/mapbox-track:"
