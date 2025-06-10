@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:gh": "ng build --configuration=production --base-href=/mapbox-track/",
+    "deploy": "npm run build:gh && npx ngh --dir=dist/mapbox-track",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -42,6 +44,7 @@
     "@types/geojson": "^7946.0.16",
     "@types/jasmine": "~5.1.0",
     "@types/mapbox-gl": "^3.4.1",
+    "angular-cli-ghpages": "^2.0.3",
     "autoprefixer": "^10.4.21",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
