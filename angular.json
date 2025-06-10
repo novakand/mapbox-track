@@ -24,6 +24,7 @@
             },
             "outputPath": "dist/mapbox-track",
             "index": "src/index.html",
+            "baseHref": "/",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
@@ -47,6 +48,7 @@
           },
           "configurations": {
             "production": {
+               "baseHref": "/mapbox-track/",
               "budgets": [
                 {
                   "type": "initial",
