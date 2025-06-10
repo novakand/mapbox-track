@@ -2,8 +2,8 @@ name: Deploy Angular App to GitHub Pages
 
 on:
   push:
-    branches: [ "master" ]  # или "main" в зависимости от вашей основной ветки
-  workflow_dispatch:  # Разрешает ручной запуск
+    branches: [ "master" ]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -25,9 +25,28 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit
 
-      - name: Build for GitHub Pages
+      - name: Build for production
         run: |
           npm run build:gh
+          # Проверяем, что сборка прошла успешно
+          if [ ! -d "dist/mapbox-track" ]; then
+            echo "❌ Error: dist/mapbox-track directory not found after build!"
+            ls -R dist
+            exit 1
+          fi
+
+      - name: Verify build output
+        run: |
+          echo "Build contents:"
+          ls -la dist/mapbox-track
+          if [ ! -f "dist/mapbox-track/index.html" ]; then
+            echo "❌ Error: index.html not found in dist/mapbox-track!"
+            exit 1
+          fi
+
+      - name: Prepare for GitHub Pages
+        run: |
+          cd dist/mapbox-track
           # Создаем 404.html для SPA
           echo '<!DOCTYPE html>
           <html>
@@ -38,16 +57,18 @@ jobs:
               </script>
             </head>
             <body>
-              Redirecting to application...
+              Redirecting...
             </body>
-          </html>' > dist/mapbox-track/404.html
-
-      - name: Modify base href for production
-        run: |
-          # Безопасная замена base href только если он равен "/"
-          sed -i 's/<base href="\/">/<base href="\/mapbox-track\/">/' dist/mapbox-track/index.html
-          # Проверяем изменения
-          grep -q '<base href="/mapbox-track/">' dist/mapbox-track/index.html || exit 1
+          </html>' > 404.html
+          
+          # Модифицируем base href только если файл существует
+          if [ -f "index.html" ]; then
+            sed -i 's|<base href="/">|<base href="/mapbox-track/">|' index.html
+            echo "✅ Successfully modified base href"
+          else
+            echo "❌ Error: index.html not found!"
+            exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -57,11 +78,4 @@ jobs:
           publish_branch: gh-pages
           enable_jekyll: false
           keep_files: false
-          force_orphan: true  # Полная очистка ветки перед деплоем
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Verify deployment
-        run: |
-          echo "Deployment completed successfully!"
-          echo "View your site at: https://novakand.github.io/mapbox-track/"
+          force_orphan: true
