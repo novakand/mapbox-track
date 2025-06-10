@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, computed, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { Subject, filter } from 'rxjs';
+import { Subject, delay, filter } from 'rxjs';
 import { LoadProgressService } from '../../../../services/load-progress.service';
 import { MapComponent } from '../../../maps/map.component';
 import { LayoutService } from '../../../../services/layout.service';
@@ -20,7 +20,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 })
 export class MapLayoutComponent implements AfterViewInit, OnInit, OnDestroy {
 
-    public showProgress: boolean = false;
+    public showProgress: boolean = true;
     public sidenavViewContent: string;
     public toolbarActions: any[];
     public excludedToolbarIds = ['filter', 'export', 'settings'];
@@ -57,6 +57,7 @@ export class MapLayoutComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private _watchForLoadProgress(): void {
         this._loadProgressService.inProgress
+            .pipe(delay(0))
             .subscribe((progress: boolean) => {
                 this.showProgress = progress;
             });

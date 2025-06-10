@@ -7,84 +7,101 @@
     position="bottom"
     showCloseIcon="false"
 >
-  <ng-template #header>
-    <ng-container>
-        <div class="flex items-center justify-between w-full mb-0 gap-2">
-            <div class="text-900 text-xl font-semibold whitespace-nowrap">ID: {{id}}</div>
-            <div class="flex items-center ml-auto"> 
-                <p-button *ngIf="false"
-                    class="text-xl  "
-                    [rounded]="true"
-                    badgeSeverity="contrast"
-                    (click)="toggleSideBar()"
-                    size="large"
-                    icon="pi pi-map"
-                    [text]="true"
-                />
+    <ng-template #header>
+        <ng-container>
+            <div class="flex items-center justify-between w-full mb-0 gap-2">
+                <div class="text-900 text-xl font-semibold whitespace-nowrap">ID: {{id}}</div>
+                <div class="flex items-center ml-auto">
+                    <p-button
+                        *ngIf="false"
+                        class="text-xl  "
+                        [rounded]="true"
+                        badgeSeverity="contrast"
+                        (click)="toggleSideBar()"
+                        size="large"
+                        icon="pi pi-map"
+                        [text]="true"
+                    />
 
-                <p-button
-                    class="text-xl ml-4" 
-                    [rounded]="true"
-                    badgeSeverity="contrast"
-                    size="large"
-                    (click)="onClose()"
-                    icon="pi pi-times"
-                    [text]="true"
-                />
+                    <p-button
+                        class="text-xl ml-4"
+                        [rounded]="true"
+                        badgeSeverity="contrast"
+                        size="large"
+                        (click)="onClose()"
+                        icon="pi pi-times"
+                        [text]="true"
+                    />
+                </div>
             </div>
-        </div>
-    </ng-container>
-</ng-template>
+        </ng-container>
+    </ng-template>
     <div class="grid">
         <div class="col-span-12 lg:col-span-12 h-full">
             <div class="grid grid-cols-12 gap-4">
-<ng-container *ngIf="data">
-  <div class="col-span-12">
-    <!-- Date Time -->
-    <div class="flex justify-between items-center mb-3">
-      <span class="font-semibold">Date Time</span>
-      <span class="font-semibold">{{ data.timestamp }}</span>
-    </div>
+                <ng-container *ngIf="data">
+                    <div class="col-span-12">
+                        <!-- Date Time -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-xl">Date</span>
+                            <span class="font-bold text-xl">
+                                {{
+                                data.timestamp && data.timestamp !== '–'
+                                ? (data.timestamp | date:'dd.MM.yyyy')
+                                : '–'
+                                }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-xl">Time</span>
+                            <span class="font-bold text-xl">
+                                {{
+                                data.timestamp && data.timestamp !== '–'
+                                ? (data.timestamp | date:'HH:mm:ss')
+                                : '–'
+                                }}
+                            </span>
+                        </div>
 
-    <!-- Coordinates -->
-    <div class="flex justify-between items-center mb-3">
-      <span class="font-semibold">Coordinates</span>
-      <span class="font-semibold">
-            {{ data.latitude  != null 
-         ? (data.latitude  | number:'1.5-5') 
-         : '-' 
-      }}
-      ,
-      {{ data.longitude != null 
-         ? (data.longitude | number:'1.5-5') 
-         : '-' 
-      }}
-      </span>
-    </div>
+                        <!-- Coordinates -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-semibold">Coordinates</span>
+                            <span class="font-semibold">
+                                {{ data.latitude != null
+                                ? (data.latitude | number:'1.5-5')
+                                : '-'
+                                }}
+                                ,
+                                {{ data.longitude != null
+                                ? (data.longitude | number:'1.5-5')
+                                : '-'
+                                }}
+                            </span>
+                        </div>
 
-    <!-- Altitude -->
-    <div class="flex justify-between items-center mb-3">
-      <span class="font-semibold">Altitude</span>
-      <span class="font-semibold">
-        {{ data.altitude != null 
-            ? (data.altitude  | number:'1.0-1') + ' m' 
-            : '–' 
-        }}
-      </span>
-    </div>
+                        <!-- Altitude -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-semibold">Altitude</span>
+                            <span class="font-semibold">
+                                {{ data.altitude != null
+                                ? (data.altitude | number:'1.0-1') + ' m'
+                                : '–'
+                                }}
+                            </span>
+                        </div>
 
-    <!-- Speed -->
-    <div class="flex justify-between items-center mb-3">
-      <span class="font-semibold">Speed</span>
-     <span class="font-semibold">
-  {{ data.speed != null
-     ? ((data.speed * 3.6) | number:'1.0-1') + ' km/h'
-     : '–'
-  }}
-</span>
-    </div>
-  </div>
-</ng-container>
+                        <!-- Speed -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-semibold">Speed</span>
+                            <span class="font-semibold">
+                                {{ data.speed != null
+                                ? ((data.speed * 3.6) | number:'1.0-1') + ' km/h'
+                                : '–'
+                                }}
+                            </span>
+                        </div>
+                    </div>
+                </ng-container>
 
 
 
@@ -139,7 +156,6 @@
                                     [formControlName]="event.formControlName"
                                     [readonlyInput]="false"
                                     [showTime]="true"
-                                    [appendTo]="'body'"
                                     [hourFormat]="'24'"
                                     inputId="date"
                                 >

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -34,7 +34,7 @@ import { TooltipOverflowDirective } from '../../../../directives/tooltip-overflo
         TooltipModule,
         TooltipOverflowDirective
     ],
-    providers: [],
+    providers: [DatePipe],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
@@ -68,11 +68,11 @@ export class MapSidebarBottomComponent implements OnDestroy, OnInit {
     private _map: any;
     private _destroy$ = new Subject<boolean>();
 
-
     constructor(
         private _fb: FormBuilder,
         private _mapService: MapService,
         private _cdr: ChangeDetectorRef,
+        private datePipe: DatePipe
     ) {
     }
 
@@ -104,13 +104,11 @@ export class MapSidebarBottomComponent implements OnDestroy, OnInit {
         }
 
         if (changes['isVisible'] && !changes['isVisible'].firstChange) {
-            // синхронизируем свойство для <p-drawer>
+
             this.isVisible = changes['isVisible'].currentValue;
         }
 
         if (changes['isVisibleButton'] && !changes['isVisibleButton'].firstChange) {
-            // если вы где-то показываете/скрываете кнопку по этому флагу,
-            // просто перезапишите его
             this.isVisibleButton = changes['isVisibleButton'].currentValue;
         }
     }
@@ -128,16 +126,27 @@ private updateFormState(): void {
     }
   }
 
-    public getTimestampTooltip(idx: number): string {
-        if (!this.trackTimestamps?.length) {
-            return '';
-        }
-        if (idx < 0) idx = 0;
-        if (idx >= this.trackTimestamps.length) {
-            idx = this.trackTimestamps.length - 1;
-        }
-        return this.trackTimestamps[idx] || '';
+   public getTimestampTooltip(idx: number): string {
+    if (!this.trackTimestamps?.length) {
+      return '';
     }
+    if (idx < 0) {
+      idx = 0;
+    } else if (idx >= this.trackTimestamps.length) {
+      idx = this.trackTimestamps.length - 1;
+    }
+
+    const iso = this.trackTimestamps[idx];
+    if (!iso) {
+      return '';
+    }
+
+    const dt = new Date(iso);
+    if (isNaN(dt.getTime())) {
+      return iso;
+    }
+    return this.datePipe.transform(dt, 'dd MMMM yyyy, HH:mm')!;
+  }
 
     public toggle(): void {
         this.isVisible = !this.isVisible;

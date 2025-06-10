@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, delay, filter, map, of, Subject, Subscription, switchMap, takeUntil, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { debounceTime, delay, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { VehicleService } from '../../services/vehicle.service';
 import { Input as RouterInput } from '@angular/core'
 import { DrawerModule } from 'primeng/drawer';
@@ -9,12 +9,13 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { DatePicker } from 'primeng/datepicker';
 import { TimelineModule } from 'primeng/timeline';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MapService } from '../../../maps/services/map-service';
 import { LoadProgressService } from '../../../../services/load-progress.service';
 import { IPointInfo } from '../../interfaces/point-info.interface';
 import { MsToKmhPipe } from '../../../../pipes/ms-to-km.pipe';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { SafeDatePipe } from '../../../../pipes/safe-date.pipe';
 @Component({
     selector: 'app-vehicle-detail',
     templateUrl: './vehicle-detail.component.html',
@@ -28,13 +29,14 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
         TimelineModule,
         FormsModule,
         ReactiveFormsModule,
-        MsToKmhPipe
+        MsToKmhPipe,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VehicleDetailComponent implements OnInit, OnDestroy {
 
     @RouterInput() id!: string;
+
     private _isMapSidebar = signal(true);
     public form: FormGroup;
     public data: IPointInfo = {
@@ -78,6 +80,7 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
         this._watchForFormValueChanges();
         this._watchForIsRepeatChanges();
         this._watchForPointValueChanges();
+
         this.breakpointObserver
             .observe(['(min-width: 992px)', '(max-width: 767px)'])
             .pipe(delay(100))
@@ -201,7 +204,9 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getById();
-        this._getTrack$.next(null);
+       this._getTrack$.next(null)
+       this._loadProgressService.show(1);
+        
     }
 
     public getById() {

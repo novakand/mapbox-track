@@ -74,17 +74,17 @@
       source="track-path"
       [layout]="layouts['track-path-layer']"
       [paint]="{
-      'line-width': 4,
-      'line-color': [
-        'step',
-        ['get','avgAltitude'],
-        '#000000',
-        200,'#800000',
-        400,'#0000FF',
-        600,'#00BFFF',
-        800,'#00BFFF'
-      ]
-    }"
+    'line-width': 4,
+    'line-color': [
+      'step',
+      ['get', 'avgAltitude'],
+      '#000000', 
+      100, '#800000',  
+      200, '#800080',  
+      300, '#0000FF',  
+      400, '#00BFFF'  
+    ]
+  }"
     ></mgl-layer>
 
     <!-- Heading lines -->

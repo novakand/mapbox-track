@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { delay, distinctUntilChanged, filter, map, Subject, Subscription, takeUntil, tap } from 'rxjs';
+import { delay, distinctUntilChanged, filter, map, Observable, Subject, Subscription, take, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { LngLatBounds } from 'mapbox-gl';
 import { MapZoomControlComponent } from './components/map-zoom-control/map-zoom-control.component';
 import { MapService } from './services/map-service';
@@ -85,6 +85,7 @@ export class MapComponent implements OnDestroy, OnInit {
     public isAutoPan = false;
     public playSpeed = 1;
     public destroy$ = new Subject<boolean>();
+    public mapLoaded$: Observable<boolean> = this.mapService.load$.asObservable();
     public playbackState = false;
     public isEnded = false;
     public layouts: Record<string, any> = {
@@ -224,11 +225,27 @@ export class MapComponent implements OnDestroy, OnInit {
         this.selectedPoint = null;
     }
 
+
+
+// Вынесем повторяющуюся логику в метод
+private _initializeTrack(p: any): void {
+  if (!p.isRepeat) {
+    this._stopPlayback();
+  }
+  const features = p.data.features as Feature<Point, GeoJsonProperties>[];
+  this.trackData = features;
+  this.trackTimestamps = features.map(f => f.properties!['timestamp'] as string);
+  this.playbackIdx = p.isRepeat ? features.length - 1 : 0;
+  this.mapService.currentTrackPoint$.next(features[this.playbackIdx]);
+  this._setupFlags(p.vehicleId, p.isRepeat);
+}
+
+
     private _watchForTrackChanges(): void {
         this._vehicleService.track$
             .pipe(
                 takeUntil(this.destroy$),
-                delay(100),
+                delay(3000),
                 tap(p => {
                     if (!this._hasValidFeatures(p)) {
                         this.remove();
@@ -236,7 +253,6 @@ export class MapComponent implements OnDestroy, OnInit {
                     }
                 }),
                 filter(p => this._hasValidFeatures(p)),
-                tap(() => this._loadProgressService.hide(999)),
                 // distinctUntilChanged((prev, curr) =>
                 //     deepEquals(prev.data.features, curr.data.features)
                 // ),
@@ -254,6 +270,7 @@ export class MapComponent implements OnDestroy, OnInit {
                     // notify service and mark for check
                     this.mapService.currentTrackPoint$.next(features[this.playbackIdx]);
                     this._setupFlags(p.vehicleId, p.isRepeat);
+                    
                     this.cdr.markForCheck();
                 }),
 
@@ -266,6 +283,7 @@ export class MapComponent implements OnDestroy, OnInit {
                 // 3) Finally, draw the model at the chosen index
                 tap(features => {
                     this._buildModelLayer(features, this.playbackIdx);
+                    this._loadProgressService.hide(999)
                 })
             )
             .subscribe((features: any) => {

@@ -39,24 +39,11 @@
         [step]="1"
         tooltipPosition="top"
         [disabled]="trackLength === 0"
-        tooltipOverflow="{{ getTimestampTooltip(form.get('timeline')!.value) }}"
+       tooltipOverflow="{{ getTimestampTooltip(form.get('timeline')!.value) }}"
         [stickTo]="'.p-slider-handle'"
         styleClass="slider-timeline"
       />
 </div>
-
-
-      <!-- <p-slider
-        formControlName="timeline"
-        [min]="0"
-        [max]="trackLength - 1"
-        [step]="1"
-        [disabled]="trackLength===0"
-        tooltipOverflow="{{ getTimestampTooltip(form.get('timeline')!.value) }}"
-        [stickTo]="'.p-slider-handle'"
-        styleClass="slider-timeline"
-      ></p-slider> -->
-   
 
     </ng-template>
     <ng-template #content>
