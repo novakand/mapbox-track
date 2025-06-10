@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --base-href / --serve-path /",
     "build": "ng build",
-    "build:gh": "ng build --base-href=/mapbox-track/ --deploy-url=/mapbox-track/",
+    "build:gh": "ng build --base-href /mapbox-track/ --deploy-url /mapbox-track/",
     "deploy": "npm run build:gh && npx ngh --dir=dist/mapbox-track",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

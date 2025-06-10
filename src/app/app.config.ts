@@ -37,6 +37,14 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideAnimationsAsync(),
     importProvidersFrom(MessageService, ToastModule),
-    provideRouter(routes)
+    importProvidersFrom(MessageService, ToastModule),
+    {
+      provide: 'BASE_HREF',
+      useFactory: () => {
+        // Определяем базовый путь автоматически
+        const baseElement = document.querySelector('base');
+        return baseElement ? baseElement.getAttribute('href') || '/' : '/';
+      }
+    }
   ]
 };

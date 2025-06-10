@@ -2,8 +2,8 @@ name: Deploy Angular App to GitHub Pages
 
 on:
   push:
-    branches:
-      - master  # или main, в зависимости от вашей основной ветки
+    branches: [ "master" ]  # или "main" в зависимости от вашей основной ветки
+  workflow_dispatch:  # Разрешает ручной запуск
 
 permissions:
   contents: write
@@ -11,26 +11,25 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: github-pages  # Добавляем окружение для лучшего трекинга
-
+    environment: production
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4  # Обновляем до последней версии
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Рекомендуемая LTS версия
-          cache: 'npm'  # Добавляем кэширование для ускорения
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --no-audit  # Отключаем audit для ускорения
+        run: npm ci --no-audit
 
-      - name: Build production bundle
+      - name: Build for GitHub Pages
         run: |
           npm run build:gh
-          # Создаем 404.html для SPA роутинга
-          echo '<!doctype html>
+          # Создаем 404.html для SPA
+          echo '<!DOCTYPE html>
           <html>
             <head>
               <script>
@@ -39,9 +38,16 @@ jobs:
               </script>
             </head>
             <body>
-              Redirecting...
+              Redirecting to application...
             </body>
           </html>' > dist/mapbox-track/404.html
+
+      - name: Modify base href for production
+        run: |
+          # Безопасная замена base href только если он равен "/"
+          sed -i 's/<base href="\/">/<base href="\/mapbox-track\/">/' dist/mapbox-track/index.html
+          # Проверяем изменения
+          grep -q '<base href="/mapbox-track/">' dist/mapbox-track/index.html || exit 1
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -49,6 +55,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist/mapbox-track
           publish_branch: gh-pages
-          enable_jekyll: false  # Отключаем обработку Jekyll
-          keep_files: false  # Очищаем ветку перед деплоем
-          cname: novakand.github.io  # Опционально, если используете кастомный домен
+          enable_jekyll: false
+          keep_files: false
+          force_orphan: true  # Полная очистка ветки перед деплоем
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Verify deployment
+        run: |
+          echo "Deployment completed successfully!"
+          echo "View your site at: https://novakand.github.io/mapbox-track/"
