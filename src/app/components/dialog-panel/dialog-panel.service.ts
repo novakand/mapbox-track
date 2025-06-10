@@ -36,7 +36,6 @@ export class DialogDrawerService implements OnDestroy {
     const injector = this.createInjector({ data: config?.data, overlayRef });
     const portal = new ComponentPortal(component, null, injector);
     overlayRef.attach(portal);
-
     overlayRef.backdropClick().subscribe(() => this.close(overlayRef, null));
 
     return { overlayRef, afterClosed: afterClosed$ };
@@ -76,7 +75,8 @@ export class DialogDrawerService implements OnDestroy {
       }
     }
   }
-  
+
+
   public closeAll(): void {
     this.afterClosedMap.forEach((_, overlayRef) => {
       this.close(overlayRef, null);
