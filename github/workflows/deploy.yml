@@ -1,40 +1,23 @@
-# .github/workflows/deploy.yml
-name: Deploy Angular App to GitHub Pages
+name: Build and deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Скачиваем код
       - uses: actions/checkout@v3
-
-      # 2. Поднимаем нужную версию Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
-
-      # 3. Устанавливаем зависимости
-      - name: Install dependencies
-        run: npm ci
-
-      # 4. Собираем проект в production-режиме
-      - name: Build production bundle
-        run: npm run build -- --configuration production --base-href=/mapbox-track/
-
-      # 5. Деплоим на ветку gh-pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - run: npm ci
+      - run: npm run build -- --configuration production --base-href=/mapbox-track/
+      - uses: actions/configure-pages@v3
+      - uses: actions/upload-pages-artifact@v1
         with:
-          # автоматически возьмёт токен из SECRET.GITHUB_TOKEN
+          path: './dist/mapbox-track'
+      - uses: actions/deploy-pages@v1
+        with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Путь к артефактам сборки
-          publish_dir: ./dist/mapbox-track
-          # Желательно явно указать ветку, но по умолчанию это gh-pages
-          publish_branch: gh-pages
