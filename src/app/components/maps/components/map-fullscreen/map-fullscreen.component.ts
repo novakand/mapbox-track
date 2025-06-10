@@ -26,7 +26,6 @@ export class MapFullscreenComponent implements OnDestroy, OnInit {
 
     public isFullscreen$ = this.fullscreenService.isFullscreen$;
 
-
     constructor(
         private fullscreenService: FullscreenService,
         @Inject(PLATFORM_ID) platformId: Object,
