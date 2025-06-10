@@ -120,6 +120,4 @@ export class AppComponent implements OnInit, OnDestroy {
       'layout-map-overlay-active': this.layoutService.isMapSidebar(),
     };
   }
-
-
 }
