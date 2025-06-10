@@ -8,7 +8,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write  # даём GITHUB_TOKEN право пушить в репозиторий
+  contents: write  # даём GITHUB_TOKEN право пушить в репо
 
 jobs:
   build-and-deploy:
@@ -31,43 +31,24 @@ jobs:
         run: npm run build:gh
 
       - name: List build output
-        run: |
-          echo "Contents of dist/mapbox-track:"
-          ls -R dist/mapbox-track
+        run: ls -R dist/mapbox-track
 
       - name: Determine publish directory
         run: |
-          # Если index.html в корне dist/mapbox-track
           if [ -f dist/mapbox-track/index.html ]; then
             echo "PUBLISH_DIR=dist/mapbox-track" >> $GITHUB_ENV
-          # Если используется prerender и index.html лежит в browser/
           elif [ -f dist/mapbox-track/browser/index.html ]; then
             echo "PUBLISH_DIR=dist/mapbox-track/browser" >> $GITHUB_ENV
           else
-            echo "❌ index.html not found in dist/mapbox-track!" >&2
+            echo "❌ index.html not found!" >&2
             exit 1
           fi
 
       - name: Prepare SPA 404 fallback
         run: |
           cd "${PUBLISH_DIR}"
-          cat > 404.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8" />
-              <script>
-                // При заходе на вложенный URL запомним путь и вернёмся на корень
-                const path = window.location.pathname;
-                sessionStorage.setItem('redirect', path);
-                location.replace("/mapbox-track/");
-              </script>
-            </head>
-            <body>
-              Redirecting...
-            </body>
-          </html>
-          EOF
+          # делаем 404.html точной копией index.html
+          cp index.html 404.html
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
