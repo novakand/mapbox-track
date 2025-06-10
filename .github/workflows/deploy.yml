@@ -3,34 +3,52 @@ name: Deploy Angular App to GitHub Pages
 on:
   push:
     branches:
-      - master    # или ваша основная ветка
+      - master  # или main, в зависимости от вашей основной ветки
 
 permissions:
-  contents: write   # чтобы GITHUB_TOKEN мог пушить в gh-pages
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: github-pages  # Добавляем окружение для лучшего трекинга
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Обновляем до последней версии
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'  # Рекомендуемая LTS версия
+          cache: 'npm'  # Добавляем кэширование для ускорения
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --no-audit  # Отключаем audit для ускорения
 
       - name: Build production bundle
-        # Здесь используем ваш скрипт, который ставит base-href и кладёт всё в dist/mapbox-track
-        run: npm run build:gh
+        run: |
+          npm run build:gh
+          # Создаем 404.html для SPA роутинга
+          echo '<!doctype html>
+          <html>
+            <head>
+              <script>
+                sessionStorage.redirect = location.pathname;
+                location.replace("/mapbox-track/");
+              </script>
+            </head>
+            <body>
+              Redirecting...
+            </body>
+          </html>' > dist/mapbox-track/404.html
 
-      - name: Deploy to gh-pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist/mapbox-track
           publish_branch: gh-pages
+          enable_jekyll: false  # Отключаем обработку Jekyll
+          keep_files: false  # Очищаем ветку перед деплоем
+          cname: novakand.github.io  # Опционально, если используете кастомный домен
