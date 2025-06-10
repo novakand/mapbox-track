@@ -76,7 +76,7 @@ export class DialogDrawerService implements OnDestroy {
       }
     }
   }
-
+  
   public closeAll(): void {
     this.afterClosedMap.forEach((_, overlayRef) => {
       this.close(overlayRef, null);
