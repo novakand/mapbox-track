@@ -218,7 +218,6 @@ export class MapComponent implements OnDestroy, OnInit {
     public onLayerClick(event) {
         this.selectedPoint = null;
         this.selectedPoint = (<any>event).features[0];
-
     }
 
     public onCloseInfoBox() {
