@@ -82,6 +82,13 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
                 const language = localStorage?.getItem('language');
                 const selectedLanguage = (language && JSON.parse(language)) ? JSON.parse(language) : { name: 'English', code: 'en' };
                 this.form?.get('language')?.setValue(selectedLanguage, { emitEvent: true, onlySelf: true });
+                if (selectedLanguage) {
+                    this.mapLanguage = selectedLanguage;
+
+                }
+                if (this._map.getStyle()) {
+                    this.applyLanguage(this.mapLanguage.code);
+                }
             });
     }
 
@@ -99,39 +106,14 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
 
         this.form.get('language')!.valueChanges
             .pipe(
-                startWith(this.form.get('language')!.value),
                 delay(0)
             )
             .subscribe(langData => {
-                const lang = langData.code;
-                if (!this._map || !this._map.getStyle()) {
-                    return;
+                localStorage.setItem('language', JSON.stringify(langData));
+                this.mapLanguage = langData;
+                if (this._map && this._map.getStyle()) {
+                    this.applyLanguage(this.mapLanguage.code);
                 }
-
-                const expr: any[] = [
-                    'coalesce',
-                    ['get', `name_${lang}`],
-                    ['get', 'name_en'],
-                    ['get', 'name']
-                ];
-
-                const layers = this._map.getStyle().layers;
-                if (!Array.isArray(layers)) {
-                    return;
-                }
-
-                layers.forEach(layer => {
-                    if (
-                        layer.type === 'symbol' &&
-                        typeof layer.id === 'string' &&
-                        layer.id.endsWith('-label')
-                    ) {
-                        try {
-                            this._map.setLayoutProperty(layer.id, 'text-field', expr);
-                        } catch {
-                        }
-                    }
-                });
             });
 
 
@@ -146,8 +128,43 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
                 const language = localStorage.getItem('language');
                 const selectedLanguage = (language && JSON.parse(language)) ? JSON.parse(language) : { name: 'English', code: 'en' };
                 this.form.get('language')?.setValue(selectedLanguage, { emitEvent: true, onlySelf: true });
+                this._map.once('styledata', () => {
+                    this.applyLanguage(this.mapLanguage.code);
+                });
             });
 
+    }
+
+
+    private applyLanguage(code: string) {
+        if (!this._map || !this._map.getStyle()) {
+            return;
+        }
+
+        const expr: any[] = [
+            'coalesce',
+            ['get', `name_${code}`],
+            ['get', 'name_en'],
+            ['get', 'name']
+        ];
+
+        const layers = this._map.getStyle().layers;
+        if (!Array.isArray(layers)) {
+            return;
+        }
+
+        layers.forEach(layer => {
+            if (
+                layer.type === 'symbol' &&
+                typeof layer.id === 'string' &&
+                layer.id.endsWith('-label')
+            ) {
+                try {
+                    this._map.setLayoutProperty(layer.id, 'text-field', expr);
+                } catch {
+                }
+            }
+        });
     }
 
     public onChangeCustomLayers(event: any) {

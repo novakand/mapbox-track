@@ -105,12 +105,14 @@ export class MapComponent implements OnDestroy, OnInit {
     public selectedPoint: GeoJSON.Feature<GeoJSON.Point> | any;
     public cursorStyle: string;
     public allClusters: any[] = [];
-    public style: string;
     public prevVehicleId;
     public didFitBoundsInRepeat;
     public _isRepeat;
     public shouldFitBounds;
     public playIndex;
+    public baseLayers = localStorage.getItem('style');
+    public selectedBaseLayers = (this.baseLayers && JSON.parse(this.baseLayers)) ? JSON.parse(this.baseLayers) : { name: 'Streets', code: 'streets-v12' };
+    public style = 'mapbox://styles/mapbox/' + this.selectedBaseLayers.code;
 
     constructor(
         public cdr: ChangeDetectorRef,
@@ -130,7 +132,7 @@ export class MapComponent implements OnDestroy, OnInit {
             zoom: [3],
             center: [29.095028, 55.635322],
             pitch: undefined,
-            style: this.layoutService.config().darkTheme ? 'mapbox://styles/mapbox/navigation-night-v1' : 'mapbox://styles/mapbox/streets-v12',
+            style: this.style,
             centerWithPanTo: true,
             movingMethod: 'jumpTo'
         }
