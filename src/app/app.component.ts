@@ -60,10 +60,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private localization: LocalizationService,
   ) {
     this._watchForRoute();
-    //this.localization.setLanguage('ru');
-    this.config.setTranslation({
-      dateFormat: 'dd-mm-yy',
-    });
+    // this.config.setTranslation({
+    //   dateFormat: 'dd-mm-yy',
+    // });
 
   }
 

@@ -54,7 +54,8 @@ export class LocalizationService {
 
     private applyPrimeLocale(code: string) {
         const cfg = LOCALES[code] || LOCALES['en'];
-        this.primeng.setTranslation(cfg);
+        this.primeng.setTranslation({...cfg, dateFormat: 'dd-mm-yy'});
+
     }
 
     private setHtmlLang(code: string) {
