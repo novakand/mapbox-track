@@ -21,7 +21,6 @@ import {
   TranslateLoader,
   TranslateService,
   TranslateStore,
-  TranslateModuleConfig
 } from '@ngx-translate/core';
 
 export function HttpLoaderFactory(http: HttpClient) {
