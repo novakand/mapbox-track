@@ -145,7 +145,7 @@ private updateFormState(): void {
     if (isNaN(dt.getTime())) {
       return iso;
     }
-    return this.datePipe.transform(dt, 'dd MMMM yyyy, HH:mm')!;
+    return this.datePipe.transform(dt, 'dd MMMM yyyy, HH:mm:ss')!;
   }
 
     public toggle(): void {
