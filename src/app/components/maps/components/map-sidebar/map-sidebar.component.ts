@@ -5,7 +5,7 @@ import { DrawerModule } from 'primeng/drawer';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { MapService } from '../../services/map-service';
-import { delay, filter, Subject, takeUntil } from 'rxjs';
+import { delay, filter, startWith, Subject, takeUntil } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 @Component({
@@ -34,7 +34,7 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
     public state: any[] = [];
     public style: string;
     public mapLanguage = { name: 'English', code: 'en' };
-    public mapBaseLayer = { name: 'Streets', code: 'streets-v12' };
+    public mapStyle = { name: 'Streets', code: 'streets-v12' };
     private _map: any;
     private _destroy$ = new Subject<boolean>();
 
@@ -61,8 +61,9 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
         { name: 'Türkçe', code: 'tr' }
     ];
 
-    public baseLayersOptions: any[] = [
-        { name: 'Streets', code: 'satellite-streets-v12' },
+    public stylesOptions: any[] = [
+        { name: 'Streets', code: 'streets-v12' },
+        { name: 'Satellite', code: 'satellite-streets-v12' },
         { name: 'Light', code: 'light-v11' },
         { name: 'Dark', code: 'dark-v11' },
         { name: 'Outdoors', code: 'outdoors-v12' },
@@ -96,29 +97,54 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
         this._watchForLoadChanges();
         this._buildForm();
 
-        this.form.get('language')?.valueChanges
-            .pipe(delay(0))
-            .subscribe((data) => {
-                localStorage.setItem('language', JSON.stringify(data));
-                this.changesLanguage.next(data);
-                const { code } = data;
-                this._map.getStyle().layers.forEach((thisLayer) => {
-                    if (thisLayer.id.indexOf('-label') > 0) {
-                        this._map.setLayoutProperty(thisLayer.id, 'text-field', '{name_' + code + '}')
+        this.form.get('language')!.valueChanges
+            .pipe(
+                startWith(this.form.get('language')!.value),
+                delay(0)
+            )
+            .subscribe(langData => {
+                const lang = langData.code;
+                if (!this._map || !this._map.getStyle()) {
+                    return;
+                }
+
+                const expr: any[] = [
+                    'coalesce',
+                    ['get', `name_${lang}`],
+                    ['get', 'name_en'],
+                    ['get', 'name']
+                ];
+
+                const layers = this._map.getStyle().layers;
+                if (!Array.isArray(layers)) {
+                    return;
+                }
+
+                layers.forEach(layer => {
+                    if (
+                        layer.type === 'symbol' &&
+                        typeof layer.id === 'string' &&
+                        layer.id.endsWith('-label')
+                    ) {
+                        try {
+                            this._map.setLayoutProperty(layer.id, 'text-field', expr);
+                        } catch {
+                        }
                     }
                 });
             });
 
-        this.form.get('baseLayers')?.valueChanges
+
+        this.form.get('style')?.valueChanges
             .pipe(delay(100))
 
             .subscribe((data) => {
                 const { code } = data;
                 this._map.setStyle('mapbox://styles/mapbox/' + code);
                 this.changesBaseLayers.next(data);
-                localStorage.setItem('baseLayers', JSON.stringify(data));
+                localStorage.setItem('style', JSON.stringify(data));
                 const language = localStorage.getItem('language');
-                const selectedLanguage = (language && JSON.parse(language)) ? JSON.parse(language) : { name: 'Русский', code: 'ru' };
+                const selectedLanguage = (language && JSON.parse(language)) ? JSON.parse(language) : { name: 'English', code: 'en' };
                 this.form.get('language')?.setValue(selectedLanguage, { emitEvent: true, onlySelf: true });
             });
 
@@ -134,11 +160,11 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
     }
 
     private _buildForm(): void {
-        const baseLayers = localStorage.getItem('baseLayers');
-        const selectedBaseLayers = (baseLayers && JSON.parse(baseLayers)) ? JSON.parse(baseLayers) : { name: 'Streets', code: 'streets-v12' };
+        const style = localStorage.getItem('style');
+        const selectedBaseLayers = (style && JSON.parse(style)) ? JSON.parse(style) : { name: 'Streets', code: 'streets-v12' };
         this.form = this._fb.group({
             language: new FormControl(''),
-            baseLayers: new FormControl(selectedBaseLayers),
+            style: new FormControl(selectedBaseLayers),
             customLayers: new FormControl(''),
         });
     }

@@ -15,7 +15,12 @@
       <div class="flex flex-col gap-2">
         <label for="start" class="block text-900 font-semibold">Language</label>
         <p-select id="type" formControlName="language" [options]="languageOptions" optionLabel="name"
-          inputStyleClass="w-full" styleClass="w-full" placeholder="Выбрать" />
+          inputStyleClass="w-full" styleClass="w-full" placeholder="Select" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="start" class="block text-900 font-semibold">Style</label>
+        <p-select id="type" formControlName="style" [options]="stylesOptions" optionLabel="name"
+          inputStyleClass="w-full" styleClass="w-full" placeholder="Select" />
       </div>
     </div>
 
