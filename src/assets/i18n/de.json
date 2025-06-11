@@ -1,0 +1,26 @@
+
+{
+  "transport": "Transport",
+  "date": "Datum",
+  "time": "Uhrzeit",
+  "coordinates": "Koordinaten",
+  "altitude": "Höhe",
+  "speed": "Geschwindigkeit",
+  "online": "Online",
+  "history": "Verlauf",
+  "settings": "Einstellungen",
+  "language": "Sprache",
+  "style": "Kartendesign",
+  "darkMode": "Dunkelmodus",
+  "maps": {
+    "trackAltitudeLegend": "Höhenlegende der Spur",
+    "veryLow": "< 100 m — Sehr niedrig",
+    "low": "100–200 m — Niedrig",
+    "moderate": "200–300 m — Mäßig",
+    "medium": "300–400 m — Mittel",
+    "high": "> 400 m — Hoch",
+    "track": "Strecke",
+    "waypoints": "Wegpunkte",
+    "autoPan": "Auto-Schwenk"
+  }
+}

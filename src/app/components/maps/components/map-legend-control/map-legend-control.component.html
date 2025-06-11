@@ -1,34 +1,11 @@
-<!-- <p-card header="Track Altitude Legend">
 
-  <ul class="space-y-2">
-            <li class="flex items-center">
-              <span class="w-4 h-4 rounded-full bg-black border border-gray-500 mr-2"></span>
-              <span>&lt; 100 m — Very low</span>
-            </li>
-            <li class="flex items-center">
-              <span
-                class="w-4 h-4 rounded-full"
-                style="background-color: #800000; border: 1px solid #666; margin-right: 0.5rem;"
-              ></span>
-              <span>100–200 m — Low</span>
-            </li>
-            <li class="flex items-center">
-              <span class="w-4 h-4 rounded-full bg-blue-600 border border-gray-500 mr-2"></span>
-              <span>200–300 m — Medium</span>
-            </li>
-            <li class="flex items-center">
-              <span class="w-4 h-4 rounded-full bg-sky-400 border border-gray-500 mr-2"></span>
-              <span>&gt; 300 m — High</span>
-            </li>
-          </ul>
-</p-card> -->
 
-<p-card header="Track Altitude Legend">
+<p-card header="{{ 'maps.trackAltitudeLegend' | translate }}">
   <ul class="space-y-2">
     <!-- < 100 m — Very low -->
     <li class="flex items-center">
       <span class="w-4 h-4 rounded-full bg-black border border-gray-500 mr-2"></span>
-      <span>&lt; 100 m — Very low</span>
+      <span>{{ 'maps.veryLow' | translate }}</span>
     </li>
 
     <!-- 100–200 m — Low -->
@@ -37,7 +14,7 @@
         class="w-4 h-4 rounded-full"
         style="background-color: #800000; border: 1px solid #666; margin-right: 0.5rem;"
       ></span>
-      <span>100–200 m — Low</span>
+      <span>{{ 'maps.low'     | translate }}</span>
     </li>
 
     <!-- 200–300 m — Moderate (Violet) -->
@@ -46,7 +23,7 @@
         class="w-4 h-4 rounded-full"
         style="background-color: #800080; border: 1px solid #666; margin-right: 0.5rem;"
       ></span>
-      <span>200–300 m — Moderate</span>
+      <span>{{ 'maps.moderate'| translate }}</span>
     </li>
 
     <!-- 300–400 m — Medium (Blue) -->
@@ -54,13 +31,13 @@
       <span
         class="w-4 h-4 rounded-full bg-blue-600 border border-gray-500 mr-2"
       ></span>
-      <span>300–400 m — Medium</span>
+      <span>{{ 'maps.medium'  | translate }}</span>
     </li>
 
     <!-- > 400 m — High (Light Blue) -->
     <li class="flex items-center">
       <span class="w-4 h-4 rounded-full bg-sky-400 border border-gray-500 mr-2"></span>
-      <span>&gt; 400 m — High</span>
+      <span>{{ 'maps.high'    | translate }}</span>
     </li>
   </ul>
 </p-card>

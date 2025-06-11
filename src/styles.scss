@@ -11,6 +11,10 @@
   margin-right: 20px;
 }
 
+body {
+    background: var(--ground-background);
+}
+
 
 .p-inputtext:disabled {
  cursor:not-allowed !important;

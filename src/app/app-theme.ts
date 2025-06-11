@@ -93,23 +93,23 @@ export const Noir = definePreset(Aura, {
             },
             dark: {
                 surface: {
-                    "50": "#eeeeff",
-                    "100": "#d1d8f0",
-                    "200": "#b8bdda",
-                    "300": "#9da3c4",
-                    "400": "#888fb2",
-                    "500": "#747ca2",
-                    "600": "#656e90",
-                    "700": "#535a79",
-                    "800": "#424862",
-                    "900": "#2e334a",
-                    "950": "#2e334a",
+                    "50": "#3e3e40",
+                    "100": "#363638",
+                    "200": "#18181b",
+                    "300": "#2a2a2c",
+                    "400": "#57575C",
+                    "500": "#222224",
+                    "600": "#1e1e20",
+                    "700": "#1a1a1c",
+                    "800": "#161618",
+                    "900": "#121214",
+                    "950": "#0f0f11"
                 },
                 primary: {
-                    color: '#424E7D',
+                    color: '#ffffff',
                     contrastColor: '#ffffff',
-                    hoverColor: '#3e4258',
-                    activeColor: '#5d6179'
+                    hoverColor: '#ffffff',
+                    activeColor: '#ffffff'
                 },
                 highlight: {
                     background: 'color-mix(in srgb, {primary.400}, transparent 84%)',

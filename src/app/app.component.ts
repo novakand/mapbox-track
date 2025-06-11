@@ -15,6 +15,8 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Toast, } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { UnAuthorizedLayoutComponent } from './components/layout/components/unauthorized-layout/unauthorized.layout.component';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalizationService } from './services/localization.service';
 
 @Component({
   selector: 'app-root',
@@ -53,9 +55,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private config: PrimeNG,
     public renderer: Renderer2,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private translateService: TranslateService,
+    private localization: LocalizationService,
   ) {
     this._watchForRoute();
+    //this.localization.setLanguage('ru');
     this.config.setTranslation({
       dateFormat: 'dd-mm-yy',
     });

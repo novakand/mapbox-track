@@ -1,42 +1,62 @@
 <div class="p-4">
-    <h2 class="font-semibold text-xl! mb-4">Transport</h2>
-    <p-listbox
-        [options]="data"
-        [(ngModel)]="active"
-        [checkmark]="true"
-        metaKeySelection="true"
-        (onChange)="onChange($event)"
-        
-        [highlightOnSelect]="true"
-        styleClass="border-none shadow-none"
-        listStyleClass="max-h-60"
-        class="w-full md:w-56"
-    >
-        <ng-template
-            let-item
-            #item
-        >
-            <div class="flex items-center justify-between w-full px-2 py-1">
-                <div class="flex items-center space-x-2">
-                    <span
-                        class="w-3 h-3 rounded-full"
-                        [style.backgroundColor]="item.color"
-                    ></span>
-                    <span class="font-bold">{{ item.id }}</span>
-                </div>
-                <i class="pi pi-angle-right text-base" style="font-size: 1.3rem"></i>
-            </div>
-        </ng-template>
+  <div class="flex items-center justify-between w-full mb-0 gap-2">
+    <div class="text-900 text-xl font-semibold whitespace-nowrap mb-4">{{ 'transport' | translate }}</div>
+    <div class="flex items-center ml-auto">
+      <p-button
+        *ngIf="isSmallScreen"
+        class="text-xl  "
+        [rounded]="true"
+        badgeSeverity="contrast"
+        (click)="toggleSideBar()"
+        size="large"
+        icon="pi pi-map"
+        [text]="true"
+      />
 
-    <ng-template let-item #empty>
-    <ng-container *ngFor="let _ of skeletons">
-      <div class="w-full  pb-3.5">
-        <p-skeleton
-          styleClass="block w-full"
-          [style]="{ height: '3.80rem' }"
-        ></p-skeleton>
+    </div>
+  </div>
+  <p-listbox
+    [options]="data"
+    [(ngModel)]="active"
+    [checkmark]="true"
+    metaKeySelection="true"
+    (onChange)="onChange($event)"
+    [highlightOnSelect]="true"
+    styleClass="border-none shadow-none"
+    listStyleClass="max-h-60"
+    class="w-full md:w-56"
+  >
+    <ng-template
+      let-item
+      #item
+    >
+      <div class="flex items-center justify-between w-full px-2 py-1">
+        <div class="flex items-center space-x-2">
+          <span
+            class="w-3 h-3 rounded-full"
+            [style.backgroundColor]="item.color"
+          ></span>
+          <span class="font-bold">{{ item.id }}</span>
+        </div>
+        <i
+          class="pi pi-angle-right text-base"
+          style="font-size: 1.3rem"
+        ></i>
       </div>
-    </ng-container>
-  </ng-template>
-    </p-listbox>
+    </ng-template>
+
+    <ng-template
+      let-item
+      #empty
+    >
+      <ng-container *ngFor="let _ of skeletons">
+        <div class="w-full  pb-3.5">
+          <p-skeleton
+            styleClass="block w-full"
+            [style]="{ height: '3.80rem' }"
+          ></p-skeleton>
+        </div>
+      </ng-container>
+    </ng-template>
+  </p-listbox>
 </div>

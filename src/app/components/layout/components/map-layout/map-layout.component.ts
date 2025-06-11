@@ -57,7 +57,6 @@ export class MapLayoutComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private _watchForLoadProgress(): void {
         this._loadProgressService.inProgress
-            //.pipe(delay(0))
             .subscribe((progress: boolean) => {
                 this.showProgress = progress;
             });
@@ -78,7 +77,6 @@ export class MapLayoutComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public isMapSidebar = computed(() => this.layoutService.isMapSidebar());
 
-  
 
     public onShowMap() {
         this.layoutService.toggleSideBar();

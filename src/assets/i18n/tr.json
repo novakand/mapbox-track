@@ -1,0 +1,25 @@
+{
+  "transport": "Ulaşım",
+  "date": "Tarih",
+  "time": "Saat",
+  "coordinates": "Koordinatlar",
+  "altitude": "İrtifa",
+  "speed": "Hız",
+  "online": "Çevrimiçi",
+  "history": "Geçmiş",
+  "settings": "Ayarlar",
+  "language": "Dil",
+  "style": "Harita stili",
+  "darkMode": "Karanlık mod",
+  "maps": {
+    "trackAltitudeLegend": "Parkur Yükseklik Açıklaması",
+    "veryLow": "< 100 m — Çok düşük",
+    "low": "100–200 m — Düşük",
+    "moderate": "200–300 m — Orta",
+    "medium": "300–400 m — Orta-yüksek",
+    "high": "> 400 m — Yüksek",
+    "track": "Parkur",
+    "waypoints": "Ara Noktalar",
+    "autoPan": "Otomatik Kaydırma"
+  }
+}

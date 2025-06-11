@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, Input, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DrawerModule } from 'primeng/drawer';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -8,11 +8,38 @@ import { MapService } from '../../services/map-service';
 import { delay, filter, startWith, Subject, takeUntil } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
+import { LocalizationService } from '../../../../services/localization.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { LayoutService } from '../../../../services/layout.service';
+import { $t, updatePreset, updateSurfacePalette } from '@primeng/themes';
+import Aura from '@primeng/themes/aura';
+import Lara from '@primeng/themes/lara';
+import Material from '@primeng/themes/material';
+import Nora from '@primeng/themes/nora';
+import { Noir } from '../../../../app-theme';
+
+const presets = {
+    Aura,
+    Material,
+    Lara,
+    Nora
+};
 @Component({
     selector: 'map-sidebar',
     templateUrl: './map-sidebar.component.html',
     styleUrls: ['./map-sidebar.component.scss'],
-    imports: [CommonModule, ReactiveFormsModule, ButtonModule, DrawerModule, MultiSelectModule, FloatLabelModule, SelectModule],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        ButtonModule,
+        DrawerModule,
+        MultiSelectModule,
+        FloatLabelModule,
+        TranslateModule,
+        SelectModule,
+        ToggleSwitchModule
+    ],
     providers: [],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -25,9 +52,14 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
     @Output() public changesBaseLayers: Subject<boolean> = new Subject<boolean>();
     @Output() public changesCustomLayers: Subject<boolean> = new Subject<boolean>();
 
+    public platformId = inject(PLATFORM_ID);
+    public presets = Object.keys(presets);
+
     constructor(
         private _fb: FormBuilder,
-        private _mapService: MapService
+        private _mapService: MapService,
+        private localization: LocalizationService,
+        public layoutService: LayoutService,
     ) {
     }
     public form: FormGroup;
@@ -44,22 +76,7 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
         customLayers: null
     }
 
-    public languageOptions: { name: string; code: string }[] = [
-        { name: 'English', code: 'en' },
-        { name: 'العربية', code: 'ar' },
-        { name: '中文 (简体)', code: 'zh-Hans' },
-        { name: '中文 (繁體)', code: 'zh-Hant' },
-        { name: 'Français', code: 'fr' },
-        { name: 'Deutsch', code: 'de' },
-        { name: 'Italiano', code: 'it' },
-        { name: '日本語', code: 'ja' },
-        { name: '한국어', code: 'ko' },
-        { name: 'Português', code: 'pt' },
-        { name: 'Русский', code: 'ru' },
-        { name: 'Español', code: 'es' },
-        { name: 'Tiếng Việt', code: 'vi' },
-        { name: 'Türkçe', code: 'tr' }
-    ];
+    public languageOptions = this.localization.languages;
 
     public stylesOptions: any[] = [
         { name: 'Streets', code: 'streets-v12' },
@@ -100,41 +117,104 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
         this._destroy$.next(true);
         this._destroy$.complete();
     }
+
     public ngOnInit(): void {
         this._watchForLoadChanges();
         this._buildForm();
+
+        if (isPlatformBrowser(this.platformId)) {
+            this.onPresetChange(this.layoutService.config().preset);
+            this.toggleRTL(this.layoutService.config().RTL!);
+        }
 
         this.form.get('language')!.valueChanges
             .pipe(
                 delay(0)
             )
             .subscribe(langData => {
-                localStorage.setItem('language', JSON.stringify(langData));
                 this.mapLanguage = langData;
                 if (this._map && this._map.getStyle()) {
                     this.applyLanguage(this.mapLanguage.code);
+                    this.localization.setLanguage(this.mapLanguage.code);
                 }
             });
 
 
-        this.form.get('style')?.valueChanges
-            .pipe(delay(100))
-
+        this.form.get('style')!
+            .valueChanges
+            .pipe(delay(100), takeUntil(this._destroy$))
             .subscribe((data) => {
-                const { code } = data;
-                this._map.setStyle('mapbox://styles/mapbox/' + code);
+                const { code: styleCode } = data;
+
+                // Применяем новый стиль карты
+                this._map.setStyle(`mapbox://styles/mapbox/${styleCode}`);
                 this.changesBaseLayers.next(data);
                 localStorage.setItem('style', JSON.stringify(data));
-                const language = localStorage.getItem('language');
-                const selectedLanguage = (language && JSON.parse(language)) ? JSON.parse(language) : { name: 'English', code: 'en' };
-                this.form.get('language')?.setValue(selectedLanguage, { emitEvent: true, onlySelf: true });
+
+                // Считаем сохранённый код языка из app_language
+                const savedLang = localStorage.getItem('app_language') || 'en';
+                const selectedLanguage = this.languageOptions.find(l => l.code === savedLang)
+                    || { name: 'English', code: 'en' };
+
+                // Обновляем селект языка без эмита события
+                this.form.get('language')!.setValue(selectedLanguage, { emitEvent: false });
+
+
                 this._map.once('styledata', () => {
                     this.applyLanguage(this.mapLanguage.code);
                 });
             });
 
+
+
+        this.form.get('darkMode')!.valueChanges
+            .pipe(
+                delay(0)
+            )
+            .subscribe(darkTheme => {
+                console.log(darkTheme, 'darkTheme')
+                this.layoutService.config.update((state) => ({ ...state, darkTheme: darkTheme }));
+            });
+
     }
 
+
+    public get toggleDarkMode(): any {
+        return this.layoutService.config().darkTheme;
+    }
+
+
+    public toggleRTL(value: boolean): void {
+        const htmlElement = document.documentElement;
+        value ? htmlElement.setAttribute('dir', 'rtl') : htmlElement.removeAttribute('dir');
+    }
+
+    public onPresetChange(event: any): void {
+        this.layoutService.config.update((state) => ({ ...state, preset: event }));
+        const preset = presets[event];
+        $t().preset(preset).preset(Noir).use({ useDefaultOptions: true });
+    }
+
+    public isDarkMode = computed(() => this.layoutService.config().darkTheme);
+
+
+    public selectedPrimaryColor = computed(() => {
+        return this.layoutService.config()?.primary;
+    });
+
+    public primaryColors = computed(() => {
+        const presetPalette = presets[this.layoutService.config()?.preset!].primitive;
+        const colors = ['emerald', 'green', 'lime', 'orange', 'amber', 'yellow', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
+        const palettes = [{ name: 'noir', palette: {} }, { name: 'primary', palette: {} }];
+        colors?.forEach((color) => {
+            palettes.push({
+                name: color,
+                palette: presetPalette[color]
+            });
+        });
+
+        return palettes;
+    });
 
     private applyLanguage(code: string) {
         if (!this._map || !this._map.getStyle()) {
@@ -179,10 +259,13 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
     private _buildForm(): void {
         const style = localStorage.getItem('style');
         const selectedBaseLayers = (style && JSON.parse(style)) ? JSON.parse(style) : { name: 'Streets', code: 'streets-v12' };
+        const code = localStorage.getItem('app_language') || 'en';
+        const selected = this.languageOptions.find(l => l.code === code)
+            || this.languageOptions[0];
         this.form = this._fb.group({
-            language: new FormControl(''),
+            language: new FormControl(selected),
             style: new FormControl(selectedBaseLayers),
-            customLayers: new FormControl(''),
+            darkMode: new FormControl(this.layoutService.config().darkTheme),
         });
     }
 

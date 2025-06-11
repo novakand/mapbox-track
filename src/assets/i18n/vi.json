@@ -1,0 +1,25 @@
+{
+  "transport": "Vận chuyển",
+  "date": "Ngày",
+  "time": "Giờ",
+  "coordinates": "Tọa độ",
+  "altitude": "Độ cao",
+  "speed": "Tốc độ",
+  "online": "Trực tuyến",
+  "history": "Lịch sử",
+  "settings": "Cài đặt",
+  "language": "Ngôn ngữ",
+  "style": "Kiểu bản đồ",
+  "darkMode": "Chế độ tối",
+  "maps": {
+    "trackAltitudeLegend": "Chú giải độ cao đường đi",
+    "veryLow": "< 100 m — Rất thấp",
+    "low": "100–200 m — Thấp",
+    "moderate": "200–300 m — Trung bình",
+    "medium": "300–400 m — Khá cao",
+    "high": "> 400 m — Cao",
+    "track": "Đường đi",
+    "waypoints": "Điểm dừng",
+    "autoPan": "Tự động di chuyển"
+  }
+}

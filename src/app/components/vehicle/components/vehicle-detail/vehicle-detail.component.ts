@@ -17,6 +17,8 @@ import { MsToKmhPipe } from '../../../../pipes/ms-to-km.pipe';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { SafeDatePipe } from '../../../../pipes/safe-date.pipe';
 import { ConfirmationService } from 'primeng/api';
+import { LayoutService } from '../../../../services/layout.service';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-vehicle-detail',
     templateUrl: './vehicle-detail.component.html',
@@ -31,6 +33,7 @@ import { ConfirmationService } from 'primeng/api';
         FormsModule,
         ReactiveFormsModule,
         MsToKmhPipe,
+        TranslateModule
     ],
     providers: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,6 +72,7 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
         public mapService: MapService,
         private breakpointObserver: BreakpointObserver,
         private confirmationService: ConfirmationService,
+        public layoutService: LayoutService,
 
     ) {
         this.data = {
@@ -101,7 +105,8 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
     }
 
     public toggleSideBar(): void {
-        this._isMapSidebar.update(current => !current);
+        this.layoutService.toggleSideBar();
+    
     }
 
     public isMapSidebar = computed(() => this._isMapSidebar());

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CardModule } from 'primeng/card';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'map-legend-control',
@@ -14,7 +15,8 @@ import { CardModule } from 'primeng/card';
      ButtonModule, 
      TooltipModule, 
      FormsModule,
-     CardModule
+     CardModule,
+     TranslateModule
   ]
 })
 export class MapLegendControlComponent {

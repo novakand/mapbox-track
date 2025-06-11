@@ -14,6 +14,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { TooltipOverflowDirective } from '../../../../directives/tooltip-overflow.directive';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'map-sidebar-bottom',
     templateUrl: './map-sidebar-bottom.component.html',
@@ -32,7 +33,8 @@ import { TooltipOverflowDirective } from '../../../../directives/tooltip-overflo
         SelectButtonModule,
         ToggleSwitchModule,
         TooltipModule,
-        TooltipOverflowDirective
+        TooltipOverflowDirective,
+        TranslateModule
     ],
     providers: [DatePipe],
     changeDetection: ChangeDetectionStrategy.OnPush,

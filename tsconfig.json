@@ -27,8 +27,7 @@
       "ES2022",
       "dom"
     ],
-    "types": [
-    ],
+    "types": ["vite/client"],
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

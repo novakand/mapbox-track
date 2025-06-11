@@ -13,7 +13,7 @@
                 <div class="text-900 text-xl font-semibold whitespace-nowrap">ID: {{id}}</div>
                 <div class="flex items-center ml-auto">
                     <p-button
-                        *ngIf="false"
+                        *ngIf="isSmallScreen"
                         class="text-xl  "
                         [rounded]="true"
                         badgeSeverity="contrast"
@@ -43,7 +43,7 @@
                     <div class="col-span-12">
                         <!-- Date Time -->
                         <div class="flex justify-between items-center mb-3">
-                            <span class="font-bold text-xl">Date</span>
+                            <span class="font-bold text-xl">{{ 'date'    | translate }}</span>
                             <span class="font-bold text-xl">
                                 {{
                                 data.timestamp && data.timestamp !== '–'
@@ -53,7 +53,7 @@
                             </span>
                         </div>
                         <div class="flex justify-between items-center mb-3">
-                            <span class="font-bold text-xl">Time</span>
+                            <span class="font-bold text-xl">{{ 'time'    | translate }}</span>
                             <span class="font-bold text-xl">
                                 {{
                                 data.timestamp && data.timestamp !== '–'
@@ -65,7 +65,7 @@
 
                         <!-- Coordinates -->
                         <div class="flex justify-between items-center mb-3">
-                            <span class="font-semibold">Coordinates</span>
+                            <span class="font-semibold">{{ 'coordinates'    | translate }}</span>
                             <span class="font-semibold">
                                 {{ data.latitude != null
                                 ? (data.latitude | number:'1.5-5')
@@ -81,7 +81,7 @@
 
                         <!-- Altitude -->
                         <div class="flex justify-between items-center mb-3">
-                            <span class="font-semibold">Altitude</span>
+                            <span class="font-semibold">{{ 'altitude'    | translate }}</span>
                             <span class="font-semibold">
                                 {{ data.altitude != null
                                 ? (data.altitude | number:'1.0-1') + ' m'
@@ -92,7 +92,7 @@
 
                         <!-- Speed -->
                         <div class="flex justify-between items-center mb-3">
-                            <span class="font-semibold">Speed</span>
+                            <span class="font-semibold">{{ 'speed'    | translate }}</span>
                             <span class="font-semibold">
                                 {{ data.speed != null
                                 ? ((data.speed * 3.6) | number:'1.0-1') + ' km/h'
@@ -119,7 +119,7 @@
                                 <label
                                     for="online"
                                     class="block font-semibold"
-                                >Online</label>
+                                >{{ 'online'    | translate }}</label>
                                 <p-toggleswitch formControlName="isRepeat" />
                             </div>
                         </div>
@@ -127,7 +127,7 @@
 
                     </div>
                     <div class="flex flex-col gap-2">
-                        <span class="block font-semibold">History</span>
+                        <span class="block font-semibold">{{ 'history'    | translate }}</span>
                         <p-timeline
                             [value]="formFields"
                             class="w-full"

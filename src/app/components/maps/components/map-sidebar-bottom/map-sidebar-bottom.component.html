@@ -75,7 +75,7 @@
               [disabled]="trackLength === 0"
               formControlName="track"
             />
-            <label for="track">Track</label>
+            <label for="track">{{ 'maps.track' | translate }}</label>
           </div>
 
           <div class="flex items-center gap-2">
@@ -84,7 +84,7 @@
               [disabled]="trackLength === 0"
               formControlName="waypoints"
             />
-            <label for="waypoints">Waypoints</label>
+            <label for="waypoints">{{ 'maps.waypoints' | translate }}</label>
           </div>
         </div>
 
@@ -95,7 +95,7 @@
               [disabled]="trackLength === 0"
               formControlName="autoPan"
             />
-            <label for="auto-pan">Auto Pan</label>
+            <label for="auto-pan">{{ 'maps.autoPan' | translate }}</label>
           </div>
         </div>
       </div>

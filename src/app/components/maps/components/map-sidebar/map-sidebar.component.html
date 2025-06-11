@@ -3,8 +3,7 @@
   [modal]="false" position="right">
   <ng-template #content>
     <div class="border-b border-surface flex items-center justify-between h-4rem">
-
-      <span class=" p-dialog-title font-semibold text-xl">Settings</span>
+      <span class=" p-dialog-title font-semibold text-xl">{{ 'settings' | translate }}</span>
       <div class="flex">
         <button pButton pRipple type="button" icon="pi pi-times"
           class="p-button-rounded p-button-text p-button-secondary" (click)="onClose()"></button>
@@ -13,15 +12,21 @@
 
     <div [formGroup]="form" class="gap-6 pt-5 flex-wrap flex-1 flex flex-col">
       <div class="flex flex-col gap-2">
-        <label for="start" class="block text-900 font-semibold">Language</label>
+        <label for="start" class="block text-900 font-semibold">{{ 'language' | translate }}</label>
         <p-select id="type" formControlName="language" [options]="languageOptions" optionLabel="name"
           inputStyleClass="w-full" styleClass="w-full" placeholder="Select" />
       </div>
       <div class="flex flex-col gap-2">
-        <label for="start" class="block text-900 font-semibold">Style</label>
+        <label for="start" class="block text-900 font-semibold">{{ 'style' | translate }}</label>
         <p-select id="type" formControlName="style" [options]="stylesOptions" optionLabel="name"
           inputStyleClass="w-full" styleClass="w-full" placeholder="Select" />
       </div>
+
+       <div class="flex flex-wrap justify-between gap-6">
+          <label for="columns" class="block font-semibold">{{ 'darkMode' | translate }}</label>
+          <p-toggleswitch formControlName="darkMode" />
+        </div>
+
     </div>
 
   </ng-template>

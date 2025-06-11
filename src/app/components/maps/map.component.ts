@@ -124,7 +124,6 @@ export class MapComponent implements OnDestroy, OnInit {
         private messageService: MessageService,
     ) {
 
-        this.previousMenuMode = this.layoutService.config().menuMode || undefined;
         this.previousDarkTheme = this.layoutService.config().darkTheme;
         this.mapOptions = {
             projection: 'mercator',
@@ -141,8 +140,6 @@ export class MapComponent implements OnDestroy, OnInit {
         const selectedBaseLayers = (baseLayers && JSON.parse(baseLayers)) ? JSON.parse(baseLayers) : { name: 'Улицы-2', code: 'streets-v12' };
         this.style = 'mapbox://styles/mapbox/' + selectedBaseLayers.code;
 
-        this._watchForLayoutThemeChanges();
-        this._watchForLayoutMenuModeChanges();
         this._watchForLayoutOverlayChanges();
         this._watchForTrackChanges();
         this._watchForRemoveChanges();
@@ -272,14 +269,11 @@ export class MapComponent implements OnDestroy, OnInit {
 
     }
 
-    /** Пользователь дернул слайдер */
     public onTimelineChange(idx: number): void {
-        // сбросим анимацию
         this._stopPlayback();
         if (!this.trackData || !this.trackData.length) {
             return;
         }
-        // корректируем диапазон
 
         if (this.isAutoPan) {
             const coords = this.trackData[this.playbackIdx].geometry.coordinates as [number, number];
@@ -292,7 +286,6 @@ export class MapComponent implements OnDestroy, OnInit {
         this.mapService.currentTrackPoint$.next(this.trackData[this.playbackIdx]);
         const slice = this.trackData.slice(0, this.playbackIdx + 1);
 
-        // «отрисовываем» карту до этой точки
         this._buildSegments(slice);
         this._buildPoints(slice);
         this._buildEvents(slice);
@@ -302,18 +295,11 @@ export class MapComponent implements OnDestroy, OnInit {
 
     }
 
-    /** Пользователь сменил множитель скорости */
     public onSpeedMultiplierChange(mult: number): void {
         this.playSpeed = mult;
-
-        // если анимация сейчас идёт — перезапускаем _таймер_, 
-        // но НЕ вызываем _stopPlayback(), чтобы не сбросить playbackState
         if (this.playbackIntervalId) {
-            // просто очистить старый интервал
             clearInterval(this.playbackIntervalId);
             this.playbackIntervalId = null;
-
-            // и сразу запустить заново
             this._startPlayback();
         }
     }
@@ -338,7 +324,6 @@ export class MapComponent implements OnDestroy, OnInit {
         this.cdr.detectChanges();
 
         if (isPlaying) {
-            // Если прошлый run дошёл до конца — сбросить в начало
             if (this.isEnded) {
                 this.playbackIdx = 0;
             }
@@ -377,7 +362,6 @@ export class MapComponent implements OnDestroy, OnInit {
     }
 
 
-    /** Остановка таймера */
     private _stopPlayback(): void {
         if (this.playbackIntervalId) {
             clearInterval(this.playbackIntervalId);
@@ -390,7 +374,6 @@ export class MapComponent implements OnDestroy, OnInit {
 
     public onAutoPanChange(enabled: boolean): void {
         this.isAutoPan = enabled;
-        // если автопан включили сразу – подвинем камеру к текущей точке
         if (this.isAutoPan && this.trackData?.[this.playbackIdx]) {
             this.moveMapCamera(this.trackData[this.playbackIdx].geometry.coordinates);
         }
@@ -633,12 +616,10 @@ export class MapComponent implements OnDestroy, OnInit {
         this.cdr.detectChanges();
     }
 
-
     public onlayerChange(event): void {
         const { code, visible } = event || {};
         this.onChangesLayers(code, visible)
     }
-
 
     public onChangesLayers(code: string, visible: boolean): void {
         const visibility: 'visible' | 'none' = visible ? 'visible' : 'none';
@@ -654,32 +635,6 @@ export class MapComponent implements OnDestroy, OnInit {
         }, new LngLatBounds(coordinates[0], coordinates[0]));
     }
 
-
-    public _watchForLayoutThemeChanges(): void {
-        this.layoutService.configUpdate$
-            .pipe(
-                delay(100),
-                filter(data => data.darkTheme !== this.previousDarkTheme),
-                takeUntil(this.destroy$)
-            )
-            .subscribe((data) => {
-                this.previousDarkTheme = data.darkTheme;
-                this.map?.setStyle(data.darkTheme ? 'mapbox://styles/mapbox/navigation-night-v1' : 'mapbox://styles/mapbox/streets-v12');
-            });
-    }
-
-    public _watchForLayoutMenuModeChanges(): void {
-        this.layoutService.configUpdate$
-            .pipe(
-                delay(50),
-                filter(data => data.menuMode !== this.previousMenuMode),
-                takeUntil(this.destroy$)
-            )
-            .subscribe((data) => {
-                this.previousMenuMode = data.menuMode;
-                this.onMapResize();
-            });
-    }
 
     public _watchForLayoutOverlayChanges(): void {
         this.layoutService.overlayChanages

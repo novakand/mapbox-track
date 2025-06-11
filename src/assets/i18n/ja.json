@@ -1,0 +1,26 @@
+
+{
+  "transport": "輸送",
+  "date": "日付",
+  "time": "時間",
+  "coordinates": "座標",
+  "altitude": "高度",
+  "speed": "速度",
+  "online": "オンライン",
+  "history": "履歴",
+  "settings": "設定",
+  "language": "言語",
+  "style": "マップのスタイル",
+  "darkMode": "ダークモード",
+  "maps": {
+    "trackAltitudeLegend": "トラック高度凡例",
+    "veryLow": "< 100 m — 非常に低い",
+    "low": "100–200 m — 低い",
+    "moderate": "200–300 m — 中程度",
+    "medium": "300–400 m — やや高い",
+    "high": "> 400 m — 高い",
+    "track": "トラック",
+    "waypoints": "ウェイポイント",
+    "autoPan": "自動パン"
+  }
+}
