@@ -106,10 +106,10 @@ export const Noir = definePreset(Aura, {
                     "950": "#0f0f11"
                 },
                 primary: {
-                    color: '#ffffff',
+                    color: '#1863CC',
                     contrastColor: '#ffffff',
-                    hoverColor: '#ffffff',
-                    activeColor: '#ffffff'
+                   hoverColor: '#124C9E',
+                    activeColor: '#5d6179'
                 },
                 highlight: {
                     background: 'color-mix(in srgb, {primary.400}, transparent 84%)',
