@@ -8,7 +8,6 @@ export class SafeDatePipe implements PipeTransform {
         this.dp = new DatePipe(this.locale);
     }
     transform(value: any, format: string = 'dd.MM.yyyy HH:mm'): string {
-        console.log(value)
         if (!value || value === '–') {
             return '';
         }

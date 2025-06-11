@@ -231,7 +231,6 @@ export class MapComponent implements OnDestroy, OnInit {
                 takeUntil(this.destroy$),
                 delay(3000),
                 tap(p => {
-                    console.log(p, 'KKKK')
                     const features = p.data?.features as any[] | undefined;
                     if (Array.isArray(features) && features.length === 0) {
                         // очищаем слой
