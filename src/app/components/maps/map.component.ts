@@ -81,12 +81,6 @@ export class MapComponent implements OnDestroy, OnInit {
         'events-layer': { visibility: 'visible' },
     };
 
-    public layers = {
-        original: { data: undefined, color: '', width: '' },
-        actual: { data: undefined, color: '', width: '' },
-        highlight: { data: undefined, color: '', width: '' },
-    }
-
     public segmentsGeoJson: FeatureCollection<LineString> | null = null;
     public headingGeoJson: FeatureCollection<LineString> | null = null;
     public pointsGeoJson: FeatureCollection<Point> | null = featureCollection([]);
@@ -484,7 +478,8 @@ export class MapComponent implements OnDestroy, OnInit {
             type: 'FeatureCollection',
             features: pointFeatures
         };
-        this.onChangesLayers('track-points-full-layer', false)
+        const isVisible = this.layouts['track-points-full-layer'].visibility === 'visible';
+        this.onChangesLayers('track-points-full-layer', isVisible)
         this.cdr.detectChanges();
     }
 
