@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { delay, filter, map, Subject, takeUntil, tap } from 'rxjs';
+import { delay, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { LngLatBounds } from 'mapbox-gl';
 import { MapZoomControlComponent } from './components/map-zoom-control/map-zoom-control.component';
 import { MapService } from './services/map-service';
@@ -210,55 +210,56 @@ export class MapComponent implements OnDestroy, OnInit {
     }
 
     private _watchForTrackChanges(): void {
+
         this._vehicleService.track$
             .pipe(
                 filter(Boolean),
                 takeUntil(this.destroy$),
-                delay(3000),
-                tap(p => {
-                    const features = p.data?.features as any[] | undefined;
-                    if (Array.isArray(features) && features.length === 0) {
-                        this.remove();
-                        if (!p.isRepeat) {
-                            this.messageService.add({
-                                key: 'notfound',
-                                summary: 'No data available for display',
-                                detail: 'Please select a different time period or vehicle.'
-                            });
-                        }
-                        this._loadProgressService.hide(999);
-                    }
-                }),
-                filter(p => this._hasValidFeatures(p)),
-                // distinctUntilChanged((prev, curr) =>
-                //     deepEquals(prev.data.features, curr.data.features)
-                // ),
+                switchMap(p =>
+                    of(p).pipe(
+                        delay(3000),
+                        tap(p => {
+                            const features = p.data?.features as any[] | undefined;
+                            if (!features || features.length === 0) {
+                                this.remove();
+                                if (!p.isRepeat) {
+                                    this.messageService.add({
+                                        key: 'notfound',
+                                        summary: 'No data available for display',
+                                        detail: 'Please select a different time period or vehicle.'
+                                    });
+                                }
+                                this._loadProgressService.hide(999);
+                                return;
+                            }
+                        }),
+                        filter(p => this._hasValidFeatures(p)),
+                        tap(p => {
+                            !p.isRepeat && this._stopPlayback();
+                            const features = p.data.features as Feature<Point, GeoJsonProperties>[];
+                            this.trackData = features;
+                            this.trackTimestamps = features.map(f => f.properties!['timestamp'] as string);
+                            this.playbackIdx = p.isRepeat ? features.length - 1 : 0;
 
-                tap(p => {
-                    !p.isRepeat && this._stopPlayback();
-                    const features = p.data.features as Feature<Point, GeoJsonProperties>[];
-                    this.trackData = features;
-                    this.trackTimestamps = features.map(f => f.properties!['timestamp'] as string);
-                    this.playbackIdx = p.isRepeat ? features.length - 1 : 0;
+                            this.mapService.currentTrackPoint$.next(features[this.playbackIdx]);
+                            this._setupFlags(p.vehicleId, p.isRepeat);
 
-                    this.mapService.currentTrackPoint$.next(features[this.playbackIdx]);
-                    this._setupFlags(p.vehicleId, p.isRepeat);
+                            this.cdr.markForCheck();
+                        }),
+                        map(p => p.data.features as Feature<Point, GeoJsonProperties>[]),
+                        tap(features => this._buildSegments(features)),
+                        tap(features => this._buildPoints(features)),
+                        tap(features => this._buildEvents(features)),
+                        tap(features => {
+                            this._buildModelLayer(features, this.playbackIdx);
 
-                    this.cdr.markForCheck();
-                }),
-
-                map(p => p.data.features as Feature<Point, GeoJsonProperties>[]),
-                tap(features => this._buildSegments(features)),
-                tap(features => this._buildPoints(features)),
-                tap(features => this._buildEvents(features)),
-
-                tap(features => {
-                    this._buildModelLayer(features, this.playbackIdx);
-                    this._loadProgressService.hide(999)
-                }),
+                        }),
+                    )
+                )
             )
             .subscribe({
                 next: (features: any) => {
+                    this._loadProgressService.hide(999);
                     this._applyFitBounds(features);
                     this.cdr.markForCheck();
                 },
@@ -266,6 +267,7 @@ export class MapComponent implements OnDestroy, OnInit {
                     console.error('Unhandled error in subscription:', err);
                 }
             });
+
     }
 
     /** Пользователь дернул слайдер */
@@ -497,7 +499,7 @@ export class MapComponent implements OnDestroy, OnInit {
             type: 'FeatureCollection',
             features: pointFeatures
         };
-        this.onChangesLayers('track-points-full-layer',false)
+        this.onChangesLayers('track-points-full-layer', false)
         this.cdr.detectChanges();
     }
 
@@ -694,7 +696,7 @@ export class MapComponent implements OnDestroy, OnInit {
             padding: { top: 120, bottom: 120, left: 120, right: 120 }
         });
     }
-   
+
     public removeAllScenegraphLayers(): void {
         this.scenegraphLayerOpts = null;
         this.cdr.markForCheck();
