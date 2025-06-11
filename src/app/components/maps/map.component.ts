@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { catchError, delay, distinctUntilChanged, EMPTY, filter, map, Observable, Subject, Subscription, take, takeUntil, tap, withLatestFrom } from 'rxjs';
+import { delay, filter, map, Subject, takeUntil, tap } from 'rxjs';
 import { LngLatBounds } from 'mapbox-gl';
 import { MapZoomControlComponent } from './components/map-zoom-control/map-zoom-control.component';
 import { MapService } from './services/map-service';
@@ -19,12 +19,9 @@ import { MapComponent as NgxMapComponent, LayerComponent, GeoJSONSourceComponent
 import { MapSidebarBottomComponent } from './components/map-sidebar-bottom/map-sidebar-bottom.component';
 import { MapLegendControlComponent } from './components/map-legend-control/map-legend-control.component';
 import { VehicleService } from '../vehicle/services/vehicle.service';
-import { point, featureCollection, lineString, } from "@turf/helpers";
+import { featureCollection, } from "@turf/helpers";
 import { Feature, FeatureCollection, GeoJsonProperties, LineString, Point } from 'geojson';
-import { deepEquals } from '@primeuix/utils';
-import { LineLayerDirective } from './components/deck/directives/line-layer.directive';
-import { TripsLayerDirective } from './components/deck/directives/trips-layer.directive';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -84,12 +81,11 @@ export class MapComponent implements OnDestroy, OnInit {
     public isAutoPan = false;
     public playSpeed = 1;
     public destroy$ = new Subject<boolean>();
-    public mapLoaded$: Observable<boolean> = this.mapService.load$.asObservable();
     public playbackState = false;
     public isEnded = false;
     public layouts: Record<string, any> = {
         'track-path-layer': { visibility: 'visible', 'line-join': 'round', 'line-cap': 'round' },
-        'track-points-full-layer': { visibility: 'visible' },
+        'track-points-full-layer': { visibility: 'none' },
         'events-layer': { visibility: 'visible' },
     };
 
@@ -101,7 +97,7 @@ export class MapComponent implements OnDestroy, OnInit {
 
     public segmentsGeoJson: FeatureCollection<LineString> | null = null;
     public headingGeoJson: FeatureCollection<LineString> | null = null;
-    public pointsGeoJson: FeatureCollection<Point> | null = null;
+    public pointsGeoJson: FeatureCollection<Point> | null = featureCollection([]);
     public eventsGeoJson: FeatureCollection<Point> | null = null;
 
     public eventIcons = [
@@ -114,11 +110,7 @@ export class MapComponent implements OnDestroy, OnInit {
     public modelScenegraphUrl = 'assets/models/test.glb';
     public isMoving = false;
     public isMapLoad = false;
-    public markers: GeoJSON.FeatureCollection<GeoJSON.Point>;
-    public clusters: GeoJSON.FeatureCollection<GeoJSON.Point>;
-    public route: GeoJSON.FeatureCollection<GeoJSON.LineString>;
     public selectedPoint: GeoJSON.Feature<GeoJSON.Point> | any;
-    public pointPosition: GeoJSON.Feature<GeoJSON.Point> | any;
     public cursorStyle: string;
     public allClusters: any[] = [];
     public style: string;
@@ -182,7 +174,7 @@ export class MapComponent implements OnDestroy, OnInit {
     }
 
 
-    calcAvgAltitude(a, b): number {
+    public calcAvgAltitude(a, b): number {
         const altA = a.altitude != null ? a.altitude : 0;
         const altB = b.altitude != null ? b.altitude : 0;
         return (altA + altB) / 2;
@@ -233,9 +225,7 @@ export class MapComponent implements OnDestroy, OnInit {
                 tap(p => {
                     const features = p.data?.features as any[] | undefined;
                     if (Array.isArray(features) && features.length === 0) {
-                        // очищаем слой
                         this.remove();
-                        // показываем тост (однократно, для не-повтора)
                         if (!p.isRepeat) {
                             this.messageService.add({
                                 key: 'notfound',
@@ -243,7 +233,6 @@ export class MapComponent implements OnDestroy, OnInit {
                                 detail: 'Please select a different time period or vehicle.'
                             });
                         }
-                        // скрываем прогресс
                         this._loadProgressService.hide(999);
                     }
                 }),
@@ -252,30 +241,24 @@ export class MapComponent implements OnDestroy, OnInit {
                 //     deepEquals(prev.data.features, curr.data.features)
                 // ),
 
-                // 1) Save trackData, timestamps & decide initial playbackIdx
                 tap(p => {
                     !p.isRepeat && this._stopPlayback();
                     const features = p.data.features as Feature<Point, GeoJsonProperties>[];
                     this.trackData = features;
                     this.trackTimestamps = features.map(f => f.properties!['timestamp'] as string);
-
-                    // decide whether to start at first or last point
                     this.playbackIdx = p.isRepeat ? features.length - 1 : 0;
 
-                    // notify service and mark for check
                     this.mapService.currentTrackPoint$.next(features[this.playbackIdx]);
                     this._setupFlags(p.vehicleId, p.isRepeat);
 
                     this.cdr.markForCheck();
                 }),
 
-                // 2) Build all the static layers
                 map(p => p.data.features as Feature<Point, GeoJsonProperties>[]),
                 tap(features => this._buildSegments(features)),
                 tap(features => this._buildPoints(features)),
                 tap(features => this._buildEvents(features)),
 
-                // 3) Finally, draw the model at the chosen index
                 tap(features => {
                     this._buildModelLayer(features, this.playbackIdx);
                     this._loadProgressService.hide(999)
@@ -521,6 +504,8 @@ export class MapComponent implements OnDestroy, OnInit {
             type: 'FeatureCollection',
             features: pointFeatures
         };
+        this.onChangesLayers('track-points-full-layer',false)
+        this.cdr.detectChanges();
     }
 
     private _buildEvents(
@@ -653,7 +638,7 @@ export class MapComponent implements OnDestroy, OnInit {
     }
 
 
-    public onlayerChange(event) {
+    public onlayerChange(event): void {
         const { code, visible } = event || {};
         this.onChangesLayers(code, visible)
     }
@@ -717,11 +702,7 @@ export class MapComponent implements OnDestroy, OnInit {
             padding: { top: 120, bottom: 120, left: 120, right: 120 }
         });
     }
-    private handleCameraMovement(frame: any[]): void {
-        this.isMoving && frame[0]?.point && this.moveMapCamera([frame[0].point[0], frame[0].point[1]]);
-    }
-
-
+   
     public removeAllScenegraphLayers(): void {
         this.scenegraphLayerOpts = null;
         this.cdr.markForCheck();

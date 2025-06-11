@@ -252,7 +252,7 @@ private updateFormState(): void {
         this.form = this._fb.group({
             timeline: new FormControl(0),
             isPlaying: new FormControl(false),
-            waypoints: new FormControl(true),
+            waypoints: new FormControl(false),
             track: new FormControl(true),
             speedMultiplier: new FormControl(1),
             autoPan: new FormControl(false),
