@@ -247,6 +247,8 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this._destroy$.next(true);
+        this._destroy$.complete();
         this.mapService.remove$.next(true);
         this.data = {
             timestamp: '–',
@@ -256,8 +258,7 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
             speed: null
         };
         this._cdr.markForCheck();
-        this._destroy$.next(true);
-        this._destroy$.complete();
+
     }
 
     private _buildForm(): void {

@@ -56,18 +56,10 @@ export class MapComponent implements OnDestroy, OnInit {
     public previousDarkTheme;
     public previousMenuMode
     public mapOptions: any;
-    public clusterOptions: any;
-    public dataCluster: any;
-    public dataMarkers: any;
-    public dataRoutes: any;
-    public dataGasStation: any;
-    public dataInspectionsPoints: any;
-    public dataCountry: any;
     public center: any;
     public bounds: any;
     public isShowPopup: boolean;
     public position: number[] = [];
-    public imageData: any;
     public zoom: number = 0;
     public map: any;
     public clusterData: any;
@@ -158,7 +150,8 @@ export class MapComponent implements OnDestroy, OnInit {
         this.mapService.remove$
             .pipe(
                 filter(Boolean),
-                tap(() => this.remove())
+                tap(() => this.remove()),
+                takeUntil(this.destroy$),
             )
             .subscribe();
     }
@@ -609,7 +602,6 @@ export class MapComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit(): void {
-        this.isShowPopup = true;
     }
 
     public onChangeSettings(event: any): void {
