@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { delay, distinctUntilChanged, filter, map, Observable, Subject, Subscription, take, takeUntil, tap, withLatestFrom } from 'rxjs';
+import { catchError, delay, distinctUntilChanged, EMPTY, filter, map, Observable, Subject, Subscription, take, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { LngLatBounds } from 'mapbox-gl';
 import { MapZoomControlComponent } from './components/map-zoom-control/map-zoom-control.component';
 import { MapService } from './services/map-service';
@@ -24,6 +24,7 @@ import { Feature, FeatureCollection, GeoJsonProperties, LineString, Point } from
 import { deepEquals } from '@primeuix/utils';
 import { LineLayerDirective } from './components/deck/directives/line-layer.directive';
 import { TripsLayerDirective } from './components/deck/directives/trips-layer.directive';
+import { ConfirmationService, MessageService } from 'primeng/api';
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -133,7 +134,8 @@ export class MapComponent implements OnDestroy, OnInit {
         private _loadProgressService: LoadProgressService,
         public layoutService: LayoutService,
         private _vehicleService: VehicleService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private messageService: MessageService,
     ) {
 
         this.previousMenuMode = this.layoutService.config().menuMode || undefined;
@@ -230,8 +232,20 @@ export class MapComponent implements OnDestroy, OnInit {
                 takeUntil(this.destroy$),
                 delay(3000),
                 tap(p => {
-                    if (!this._hasValidFeatures(p)) {
+                    console.log(p, 'KKKK')
+                    const features = p.data?.features as any[] | undefined;
+                    if (Array.isArray(features) && features.length === 0) {
+                        // очищаем слой
                         this.remove();
+                        // показываем тост (однократно, для не-повтора)
+                        if (!p.isRepeat) {
+                            this.messageService.add({
+                                key: 'notfound',
+                                summary: 'No data available for display',
+                                detail: 'Please select a different time period or vehicle.'
+                            });
+                        }
+                        // скрываем прогресс
                         this._loadProgressService.hide(999);
                     }
                 }),
@@ -253,7 +267,7 @@ export class MapComponent implements OnDestroy, OnInit {
                     // notify service and mark for check
                     this.mapService.currentTrackPoint$.next(features[this.playbackIdx]);
                     this._setupFlags(p.vehicleId, p.isRepeat);
-                    
+
                     this.cdr.markForCheck();
                 }),
 
@@ -267,11 +281,16 @@ export class MapComponent implements OnDestroy, OnInit {
                 tap(features => {
                     this._buildModelLayer(features, this.playbackIdx);
                     this._loadProgressService.hide(999)
-                })
+                }),
             )
-            .subscribe((features: any) => {
-                this._applyFitBounds(features);
-                this.cdr.markForCheck();
+            .subscribe({
+                next: (features: any) => {
+                    this._applyFitBounds(features);
+                    this.cdr.markForCheck();
+                },
+                error: err => {
+                    console.error('Unhandled error in subscription:', err);
+                }
             });
     }
 
@@ -301,7 +320,7 @@ export class MapComponent implements OnDestroy, OnInit {
         this._buildEvents(slice);
         this._buildModelLayer(slice, this.playbackIdx);
         this._applyFitBounds(slice);
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
 
     }
 
@@ -387,7 +406,7 @@ export class MapComponent implements OnDestroy, OnInit {
             this.playbackIntervalId = null;
         }
         this.playbackState = false;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
     }
 
 

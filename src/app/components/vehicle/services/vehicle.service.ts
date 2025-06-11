@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, identity, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, defer, identity, Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, map, repeat, retry, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { IVehicle } from '../interfaces/vehicle.interface';
@@ -61,10 +61,9 @@ export class VehicleService {
             return this._http.get(`${environment.apiUri}tracking?${params.toString()}`);
         }).pipe(
             map(response => response),
-            catchError(error => error),
-            retry({ delay: 20000 }),
+             retry({ count: 2, delay: 20000 }),
             isRepeat ? repeat({ delay: 20000 }) : identity,
-            tap(data => this.track$.next({ vehicleId: id, data, isRepeat }))
+            tap(data => this.track$.next({ vehicleId: id, data, isRepeat })),
         );
     }
 }

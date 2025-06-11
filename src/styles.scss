@@ -11,6 +11,19 @@
   margin-right: 20px;
 }
 
+
+.p-inputtext:disabled {
+ cursor:not-allowed !important;
+}
+
+.p-disabled, .p-disabled * {
+    cursor:not-allowed !important;
+}
+
+.p-disabled, .p-disabled{
+   cursor:not-allowed !important;
+}
+
 .slider-container {
   background: var(--p-slider-track-background);
   height: var(--p-slider-track-size);
@@ -221,7 +234,6 @@ gmp-advanced-marker {
   width: 0;
   height: 3px;
   background-color: #007bff;
-  /* или временный красный для дебага */
   z-index: 999;
   transition: transform 0.3s ease, width 0.3s ease;
 }
@@ -630,7 +642,7 @@ mgl-map {
 
 .p-disabled,
 .p-disabled * {
-  cursor: inherit !important
+  cursor: not-allowed !important;
 }
 
 .p-selectbutton .p-button.p-highlight {

@@ -5,19 +5,27 @@ import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import { Noir } from './app-theme';
 import { ToastModule } from 'primeng/toast';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { provideMapboxGL } from 'ngx-mapbox-gl';
 import localeEnGb from '@angular/common/locales/en-GB';
 import { registerLocaleData } from '@angular/common';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { ErrorInterceptor } from './interceptors/http-error.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 registerLocaleData(localeEnGb);
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: LOCALE_ID, useValue: 'en-GB' },
+     {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,  
+      multi: true, 
+    },
     importProvidersFrom(BrowserModule),
     provideZoneChangeDetection({ eventCoalescing: true }),
     providePrimeNG({
+      ripple: true,   
       theme: {
         preset: Noir,
         options: {
@@ -36,8 +44,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(),
     provideAnimationsAsync(),
-    importProvidersFrom(MessageService, ToastModule),
-    importProvidersFrom(MessageService, ToastModule),
+    importProvidersFrom(BrowserAnimationsModule, ToastModule),
+    // importProvidersFrom(MessageService, ToastModule),
     {
       provide: 'BASE_HREF',
       useFactory: () => {

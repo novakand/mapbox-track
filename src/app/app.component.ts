@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { HttpClientService } from './services/http-client.service';
 import { LoadPreloaderService } from './services/load-preloader.service';
@@ -8,18 +8,18 @@ import { PageLayout } from './components/layout/enums/page-layout.enum';
 import { PageLayoutService } from './components/layout/services/page-layout.service';
 import { AuthorizedLayoutComponent } from './components/layout/components/authorized-layout/component/authorized-layout.component';
 import { LayoutService } from './services/layout.service';
-import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { PrimeNG } from 'primeng/config';
 import { LoadProgressService } from './services/load-progress.service';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
+import { Toast, } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { UnAuthorizedLayoutComponent } from './components/layout/components/unauthorized-layout/unauthorized.layout.component';
 
 @Component({
   selector: 'app-root',
   imports: [CommonModule,
-    ToastModule,
+    Toast,
     RouterOutlet,
     ConfirmDialog,
     ButtonModule,
@@ -53,6 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private config: PrimeNG,
     public renderer: Renderer2,
+    private messageService: MessageService
   ) {
     this._watchForRoute();
     this.config.setTranslation({
@@ -67,10 +68,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void { }
 
-  public onActivateRouterOutlet() {
-
-  }
-
+  public onActivateRouterOutlet() {}
 
   private _watchForRoute(): void {
     this.router.events.subscribe((event) => {

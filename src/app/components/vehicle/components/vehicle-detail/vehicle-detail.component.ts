@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { debounceTime, delay, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, debounceTime, delay, EMPTY, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { VehicleService } from '../../services/vehicle.service';
 import { Input as RouterInput } from '@angular/core'
 import { DrawerModule } from 'primeng/drawer';
@@ -16,6 +16,7 @@ import { IPointInfo } from '../../interfaces/point-info.interface';
 import { MsToKmhPipe } from '../../../../pipes/ms-to-km.pipe';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { SafeDatePipe } from '../../../../pipes/safe-date.pipe';
+import { ConfirmationService } from 'primeng/api';
 @Component({
     selector: 'app-vehicle-detail',
     templateUrl: './vehicle-detail.component.html',
@@ -31,6 +32,7 @@ import { SafeDatePipe } from '../../../../pipes/safe-date.pipe';
         ReactiveFormsModule,
         MsToKmhPipe,
     ],
+    providers: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VehicleDetailComponent implements OnInit, OnDestroy {
@@ -66,6 +68,7 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
         private _loadProgressService: LoadProgressService,
         public mapService: MapService,
         private breakpointObserver: BreakpointObserver,
+        private confirmationService: ConfirmationService,
 
     ) {
         this.data = {
@@ -112,12 +115,26 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
     private _listenGetTrack(): void {
         this._getTrack$
             .pipe(
-                delay(10),
+                delay(50),
                 tap(() => this._loadProgressService.show(1)),
                 map(() => this._buildParams()),
                 switchMap(({ start, end, isRepeat }) =>
                     this._vehicleService.getVehicleTrack(this.id, start, end, isRepeat)
                 ),
+                catchError(err => {
+
+                    this.confirmationService.confirm({
+                        key: 'error',
+                        accept: () => {
+
+                        },
+                        reject: () => {
+
+                        }
+                    });
+                    this._loadProgressService.hide(999);
+                    return EMPTY;
+                }),
                 takeUntil(this._destroy$),
             )
             .subscribe();
@@ -204,8 +221,8 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getById();
-       this._getTrack$.next(null)
-        
+        this._getTrack$.next(null)
+
     }
 
     public getById() {
