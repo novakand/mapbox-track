@@ -409,7 +409,7 @@ body {
   transition: background-color var(--transition-duration);
   overflow: hidden;
   cursor: pointer;
-  z-index: 999;
+  z-index: 10;
 }
 
 

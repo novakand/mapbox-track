@@ -13,11 +13,11 @@
             class="layout-map-container"
             style="width: 100%; height: 100%;"
         >
-            <button *ngIf="!isSmallScreen"
+            <button 
                 class="map-config-button p-link"
                 [ngClass]="{
-            '!ml-0': !isMapSidebar(),
-            '!ml-[24.8rem] max-991:hidden': isMapSidebar()
+            'ml-0!': !isMapSidebar(),
+            'ml-[24.8rem]! max-[991px]:hidden': isMapSidebar()
           }"
                 (click)="toggleSideBar()"
                 type="button"
