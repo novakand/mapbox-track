@@ -43,6 +43,7 @@ export class VehicleService {
         );
     }
 
+
     public getVehicleTrack(
         id: string,
         start: string,
@@ -50,24 +51,32 @@ export class VehicleService {
         isRepeat = false
     ) {
         return defer(() => {
-            const currentEnd = isRepeat
-                ? new Date().toISOString().split('.')[0] + 'Z'
-                : end;
+            // если повтор — вычисляем now и начало дня
+            const now = new Date();
+            const isoNow = now.toISOString().split('.')[0] + 'Z';
+            const midnight = new Date(now);
+            midnight.setHours(0, 0, 0, 0);
+            const isoStartOfDay = midnight.toISOString().split('.')[0] + 'Z';
+
+            const currentStart = isRepeat ? isoStartOfDay : start;
+            const currentEnd = isRepeat ? isoNow : end;
 
             const params = new URLSearchParams({
                 token: this.token,
                 vehicle_id: id,
-                start,
-                end: currentEnd,
+                start: currentStart,
+                end: currentEnd
             });
+
             return this._http.get(`${environment.apiUri}tracking?${params.toString()}`);
         }).pipe(
             map(response => response),
             retry({ count: 2, delay: 20000 }),
             isRepeat ? repeat({ delay: 20000 }) : identity,
-            tap(data => this.track$.next({ vehicleId: id, data, isRepeat })),
+            tap(data => this.track$.next({ vehicleId: id, data, isRepeat }))
         );
     }
+
 
 
 

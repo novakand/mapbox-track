@@ -60,10 +60,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private localization: LocalizationService,
   ) {
     this._watchForRoute();
-    // this.config.setTranslation({
-    //   dateFormat: 'dd-mm-yy',
-    // });
-
   }
 
   public ngOnInit(): void {
