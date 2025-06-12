@@ -1,6 +1,7 @@
 {
   "name": "mapbox-track",
   "version": "0.0.0",
+   "homepage": "https://novakand.github.io/mapbox-track/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --base-href / --serve-path /",

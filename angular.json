@@ -39,11 +39,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-               {
-                "glob": "manifest.json",
-                "input": "src",
-                "output": ""
-              },
+              "src/manifest.json",
               {
                 "glob": "**/*",
                 "input": "node_modules/material-icons/iconfont/fonts",
