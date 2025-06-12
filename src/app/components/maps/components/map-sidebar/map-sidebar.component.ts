@@ -90,19 +90,18 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
 
     private _watchForLoadChanges() {
         this._mapService.load$
-            .pipe(
-                filter(Boolean),
-                takeUntil(this._destroy$),
-            )
-            .subscribe((data: any) => {
-                this._map = data;
-                const language = localStorage?.getItem('language');
-                const selectedLanguage = (language && JSON.parse(language)) ? JSON.parse(language) : { name: 'English', code: 'en' };
-                this.form?.get('language')?.setValue(selectedLanguage, { emitEvent: true, onlySelf: true });
-                if (selectedLanguage) {
-                    this.mapLanguage = selectedLanguage;
+            .pipe(filter(Boolean), takeUntil(this._destroy$))
+            .subscribe((mapInstance: any) => {
+                this._map = mapInstance;
 
-                }
+                // читаем только код из app_language
+                const savedCode = localStorage.getItem('app_language') || 'en';
+                const selected = this.languageOptions.find(l => l.code === savedCode)
+                    || this.languageOptions[0];
+
+                this.form.get('language')!.setValue(selected, { emitEvent: true });
+                this.mapLanguage = selected;
+
                 if (this._map.getStyle()) {
                     this.applyLanguage(this.mapLanguage.code);
                 }
@@ -119,8 +118,9 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit(): void {
-        this._watchForLoadChanges();
         this._buildForm();
+        this._watchForLoadChanges();
+
 
         if (isPlatformBrowser(this.platformId)) {
             this.onPresetChange(this.layoutService.config().preset);
@@ -178,11 +178,9 @@ export class MapSidebarComponent implements OnDestroy, OnInit {
 
     }
 
-
     public get toggleDarkMode(): any {
         return this.layoutService.config().darkTheme;
     }
-
 
     public toggleRTL(value: boolean): void {
         const htmlElement = document.documentElement;
