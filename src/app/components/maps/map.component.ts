@@ -22,6 +22,7 @@ import { VehicleService } from '../vehicle/services/vehicle.service';
 import { featureCollection, } from "@turf/helpers";
 import { Feature, FeatureCollection, GeoJsonProperties, LineString, Point } from 'geojson';
 import { MessageService } from 'primeng/api';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -43,7 +44,8 @@ import { MessageService } from 'primeng/api';
         MapLegendControlComponent,
         DeckDirective,
         ScenegraphLayerDirective,
-        PopupComponent
+        PopupComponent,
+        TranslateModule
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -116,6 +118,7 @@ export class MapComponent implements OnDestroy, OnInit {
         private _vehicleService: VehicleService,
         private ngZone: NgZone,
         private messageService: MessageService,
+        private translate: TranslateService,
     ) {
 
         this.previousDarkTheme = this.layoutService.config().darkTheme;
@@ -218,8 +221,8 @@ export class MapComponent implements OnDestroy, OnInit {
                                 if (!p.isRepeat) {
                                     this.messageService.add({
                                         key: 'notfound',
-                                        summary: 'No data available for display',
-                                        detail: 'Please select a different time period or vehicle.'
+                                        summary: this.translate.instant('toast.notfound.nodata.summary'),
+                                        detail: this.translate.instant('toast.notfound.nodata.detail')
                                     });
                                 }
                                 this._loadProgressService.hide(999);

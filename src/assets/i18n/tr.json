@@ -21,5 +21,14 @@
     "track": "Parkur",
     "waypoints": "Ara Noktalar",
     "autoPan": "Otomatik Kaydırma"
-  }
+  },
+   "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "Görüntülenecek veri yok",
+          "detail": "Lütfen farklı bir zaman dilimi seçin."
+        }
+      }
+    }
+  
 }

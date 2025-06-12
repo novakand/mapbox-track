@@ -21,5 +21,13 @@
     "track": "Đường đi",
     "waypoints": "Điểm dừng",
     "autoPan": "Tự động di chuyển"
-  }
+  },
+  "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "Không có dữ liệu để hiển thị",
+          "detail": "Vui lòng chọn khoảng thời gian khác."
+        }
+      }
+    }
 }

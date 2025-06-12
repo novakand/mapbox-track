@@ -21,5 +21,13 @@
     "track": "Rota",
     "waypoints": "Pontos de rota",
     "autoPan": "Pan automática"
-  }
+  },
+  "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "Nenhum dado disponível para exibição",
+          "detail": "Selecione um período de tempo diferente."
+        }
+      }
+    }
 }

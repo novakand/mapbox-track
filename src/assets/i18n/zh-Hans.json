@@ -21,5 +21,13 @@
     "track": "轨迹",
     "waypoints": "途经点",
     "autoPan": "自动漫游"
-  }
+  },
+  "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "无可显示的数据",
+          "detail": "请选择其他时间段。"
+        }
+      }
+    }
 }

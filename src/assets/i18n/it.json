@@ -22,5 +22,13 @@
     "track": "Traccia",
     "waypoints": "Punti di percorso",
     "autoPan": "Panoramica automatica"
-  }
+  },
+  "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "Nessun dato disponibile per la visualizzazione",
+          "detail": "Seleziona un periodo di tempo diverso."
+        }
+      }
+    }
 }

@@ -22,5 +22,13 @@
     "track": "Strecke",
     "waypoints": "Wegpunkte",
     "autoPan": "Auto-Schwenk"
-  }
+  },
+  "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "Keine Daten zur Anzeige verfügbar",
+          "detail": "Bitte wählen Sie einen anderen Zeitraum aus."
+        }
+      }
+    }
 }

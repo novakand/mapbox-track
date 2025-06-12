@@ -22,5 +22,13 @@
     "track": "トラック",
     "waypoints": "ウェイポイント",
     "autoPan": "自動パン"
-  }
+  },
+  "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "表示可能なデータがありません",
+          "detail": "別の期間を選択してください。"
+        }
+      }
+    }
 }

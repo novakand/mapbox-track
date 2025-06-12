@@ -21,5 +21,13 @@
     "track": "軌跡",
     "waypoints": "途經點",
     "autoPan": "自動漫遊"
-  }
+  },
+  "toast": {
+      "notfound": {
+        "nodata": {
+          "summary": "無可顯示的數據",
+          "detail": "請選擇其他時間段。"
+        }
+      }
+    }
 }
