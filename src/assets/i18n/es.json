@@ -13,7 +13,7 @@
   "style": "Estilo de mapa",
   "darkMode": "Modo oscuro",
   "maps": {
-    "trackAltitudeLegend": "Leyenda de altitud de la ruta",
+ "trackAltitudeLegend": "Altitud",
     "veryLow": "< 100 m",
     "low": "100–200 m ",
     "moderate": "200–300 m ",

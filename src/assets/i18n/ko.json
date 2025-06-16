@@ -13,7 +13,7 @@
    "style": "지도 스타일",
   "darkMode": "다크 모드",
   "maps": {
-    "trackAltitudeLegend": "트랙 고도 범례",
+   "trackAltitudeLegend": "고도",
     "veryLow": "< 100 m",
     "low": "100–200 m ",
     "moderate": "200–300 m ",

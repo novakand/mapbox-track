@@ -13,7 +13,7 @@
    "style": "Stile mappa",
   "darkMode": "Modalità scura",
   "maps": {
-    "trackAltitudeLegend": "Legenda altitudine percorso",
+   "trackAltitudeLegend": "Altitudine",
     "veryLow": "< 100 m",
     "low": "100–200 m ",
     "moderate": "200–300 m ",

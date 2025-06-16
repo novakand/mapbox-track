@@ -12,7 +12,7 @@
   "style": "Kiểu bản đồ",
   "darkMode": "Chế độ tối",
   "maps": {
-    "trackAltitudeLegend": "Chú giải độ cao đường đi",
+   "trackAltitudeLegend": "Độ cao",
     "veryLow": "< 100 m",
     "low": "100–200 m ",
     "moderate": "200–300 m ",

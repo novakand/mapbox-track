@@ -12,7 +12,7 @@
   "style": "Harita stili",
   "darkMode": "Karanlık mod",
   "maps": {
-    "trackAltitudeLegend": "Parkur Yükseklik Açıklaması",
+   "trackAltitudeLegend": "İrtifa",
     "veryLow": "< 100 m",
     "low": "100–200 m ",
     "moderate": "200–300 m ",

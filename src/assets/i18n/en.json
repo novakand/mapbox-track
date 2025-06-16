@@ -12,7 +12,7 @@
   "style": "Style map",
   "darkMode": "Dark mode",
   "maps": {
-    "trackAltitudeLegend": "Track Altitude Legend",
+    "trackAltitudeLegend": "Altitude",
     "veryLow": "< 100 m",
     "low": "100–200 m ",
     "moderate": "200–300 m ",

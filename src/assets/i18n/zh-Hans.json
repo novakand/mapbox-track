@@ -12,7 +12,7 @@
   "style": "地图样式",
   "darkMode": "深色模式",
   "maps": {
-    "trackAltitudeLegend": "轨迹高度图例",
+   "trackAltitudeLegend": "高度",
     "veryLow": "< 100 m",
     "low": "100–200 m ",
     "moderate": "200–300 m ",
