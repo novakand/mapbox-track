@@ -13,11 +13,11 @@
   "darkMode": "Chế độ tối",
   "maps": {
     "trackAltitudeLegend": "Chú giải độ cao đường đi",
-    "veryLow": "< 100 m — Rất thấp",
-    "low": "100–200 m — Thấp",
-    "moderate": "200–300 m — Trung bình",
-    "medium": "300–400 m — Khá cao",
-    "high": "> 400 m — Cao",
+    "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
     "track": "Đường đi",
     "waypoints": "Điểm dừng",
     "autoPan": "Tự động di chuyển"

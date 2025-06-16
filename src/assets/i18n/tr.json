@@ -13,11 +13,11 @@
   "darkMode": "Karanlık mod",
   "maps": {
     "trackAltitudeLegend": "Parkur Yükseklik Açıklaması",
-    "veryLow": "< 100 m — Çok düşük",
-    "low": "100–200 m — Düşük",
-    "moderate": "200–300 m — Orta",
-    "medium": "300–400 m — Orta-yüksek",
-    "high": "> 400 m — Yüksek",
+    "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
     "track": "Parkur",
     "waypoints": "Ara Noktalar",
     "autoPan": "Otomatik Kaydırma"

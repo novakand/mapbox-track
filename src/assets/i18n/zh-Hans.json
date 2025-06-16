@@ -13,11 +13,11 @@
   "darkMode": "深色模式",
   "maps": {
     "trackAltitudeLegend": "轨迹高度图例",
-    "veryLow": "< 100 米 — 很低",
-    "low": "100–200 米 — 低",
-    "moderate": "200–300 米 — 中等",
-    "medium": "300–400 米 — 较高",
-    "high": "> 400 米 — 高",
+    "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
     "track": "轨迹",
     "waypoints": "途经点",
     "autoPan": "自动漫游"

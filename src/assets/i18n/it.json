@@ -14,11 +14,11 @@
   "darkMode": "Modalità scura",
   "maps": {
     "trackAltitudeLegend": "Legenda altitudine percorso",
-    "veryLow": "< 100 m — Molto bassa",
-    "low": "100–200 m — Bassa",
-    "moderate": "200–300 m — Moderata",
-    "medium": "300–400 m — Media",
-    "high": "> 400 m — Alta",
+    "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
     "track": "Traccia",
     "waypoints": "Punti di percorso",
     "autoPan": "Panoramica automatica"

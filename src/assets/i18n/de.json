@@ -14,11 +14,11 @@
   "darkMode": "Dunkelmodus",
   "maps": {
     "trackAltitudeLegend": "Höhenlegende der Spur",
-    "veryLow": "< 100 m — Sehr niedrig",
-    "low": "100–200 m — Niedrig",
-    "moderate": "200–300 m — Mäßig",
-    "medium": "300–400 m — Mittel",
-    "high": "> 400 m — Hoch",
+    "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
     "track": "Strecke",
     "waypoints": "Wegpunkte",
     "autoPan": "Auto-Schwenk"

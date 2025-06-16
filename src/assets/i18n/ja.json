@@ -14,11 +14,11 @@
   "darkMode": "ダークモード",
   "maps": {
     "trackAltitudeLegend": "トラック高度凡例",
-    "veryLow": "< 100 m — 非常に低い",
-    "low": "100–200 m — 低い",
-    "moderate": "200–300 m — 中程度",
-    "medium": "300–400 m — やや高い",
-    "high": "> 400 m — 高い",
+   "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
     "track": "トラック",
     "waypoints": "ウェイポイント",
     "autoPan": "自動パン"

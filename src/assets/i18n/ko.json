@@ -14,11 +14,11 @@
   "darkMode": "다크 모드",
   "maps": {
     "trackAltitudeLegend": "트랙 고도 범례",
-    "veryLow": "< 100 m — 매우 낮음",
-    "low": "100–200 m — 낮음",
-    "moderate": "200–300 m — 보통",
-    "medium": "300–400 m — 중간",
-    "high": "> 400 m — 높음",
+    "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
     "track": "트랙",
     "waypoints": "웨이포인트",
     "autoPan": "자동 팬"

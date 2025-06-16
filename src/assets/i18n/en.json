@@ -1,33 +1,33 @@
 {
-    "transport": "Transport",
-    "date": "Date",
-    "time": "Time",
-    "coordinates": "Coordinates",
-    "altitude": "Altitude",
-    "speed": "Speed",
-    "online": "Online",
-    "history": "History",
-    "settings": "Settings",
-    "language": "Language",
-    "style": "Style map",
-    "darkMode": "Dark mode",
-    "maps": {
-        "trackAltitudeLegend": "Track Altitude Legend",
-        "veryLow": "< 100 m — Very low",
-        "low": "100–200 m — Low",
-        "moderate": "200–300 m — Moderate",
-        "medium": "300–400 m — Medium",
-        "high": "400 m — High",
-        "track": "Track",
-        "waypoints": "Waypoints",
-        "autoPan": "Auto Pan"
-    },
-   "toast": {
-      "notfound": {
-        "nodata": {
-          "summary": "No data available for display",
-          "detail": "Please select a different time period."
-        }
+  "transport": "Transport",
+  "date": "Date",
+  "time": "Time",
+  "coordinates": "Coordinates",
+  "altitude": "Altitude",
+  "speed": "Speed",
+  "online": "Online",
+  "history": "History",
+  "settings": "Settings",
+  "language": "Language",
+  "style": "Style map",
+  "darkMode": "Dark mode",
+  "maps": {
+    "trackAltitudeLegend": "Track Altitude Legend",
+    "veryLow": "< 100 m",
+    "low": "100–200 m ",
+    "moderate": "200–300 m ",
+    "medium": "300–400 m ",
+    "high": "> 400 m ",
+    "track": "Track",
+    "waypoints": "Waypoints",
+    "autoPan": "Auto Pan"
+  },
+  "toast": {
+    "notfound": {
+      "nodata": {
+        "summary": "No data available for display",
+        "detail": "Please select a different time period."
       }
     }
+  }
 }
