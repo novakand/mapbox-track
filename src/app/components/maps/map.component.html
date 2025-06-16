@@ -134,24 +134,27 @@
 
 
 
-   <mgl-layer
-  id="track-points-hikvision"
-  type="symbol"
-  source="track-points-full"
-  (layerClick)="onLayerClick($event)"
-  [filter]="['==', ['get', 'priority'], 1]"
-  [layout]="layouts['track-points-hikvision']"
-></mgl-layer>
+    <mgl-layer
+      *ngIf="pointsGeoJson"
+      id="track-points-hikvision"
+      type="symbol"
+      source="track-points-full"
+      (layerClick)="onLayerClick($event)"
+      [filter]="['==', ['get', 'priority'], 1]"
+      [layout]="layouts['track-points-hikvision']"
+    ></mgl-layer>
 
-<!-- triangle (iridium) -->
-<mgl-layer
-  id="track-points-iridium"
-  type="symbol"
-  source="track-points-full"
-  (layerClick)="onLayerClick($event)"
-  [filter]="['==', ['get', 'priority'], 2]"
-  [layout]="layouts['track-points-iridium']"
-></mgl-layer>
+    <!-- triangle (iridium) -->
+    <mgl-layer
+      *ngIf="pointsGeoJson"
+      id="track-points-iridium"
+      type="symbol"
+      source="track-points-full"
+      (layerClick)="onLayerClick($event)"
+      [filter]="['==', ['get', 'priority'], 2]"
+      [layout]="layouts['track-points-iridium']"
+    ></mgl-layer>
+
     <!-- Event icons -->
     <mgl-geojson-source
       *ngIf="eventsGeoJson"
@@ -212,11 +215,11 @@
           </div>
 
           <ng-container *ngFor="let key of getPropertiesKeys(selectedPoint)">
-        <div class="flex items-center">
-          <span class="font-semibold w-28 capitalize">{{ key }}:</span>
-          <span>{{ selectedPoint?.properties?.[key] ?? '-' }}</span>
-        </div>
-      </ng-container>
+            <div class="flex items-center">
+              <span class="font-semibold w-28 capitalize">{{ key }}:</span>
+              <span>{{ selectedPoint?.properties?.[key] ?? '-' }}</span>
+            </div>
+          </ng-container>
           <!-- <div class="flex items-center">
             <span class="font-semibold w-24">Altitude:</span>
             <span>{{ selectedPoint?.properties?.altitude ||'-' }}</span>
@@ -257,7 +260,7 @@
             <span>{{ selectedPoint?.properties?.waterup }}</span>
           </div> -->
 
-          
+
         </div>
 
       </div>

@@ -170,8 +170,8 @@ export class MapComponent implements OnDestroy, OnInit {
     }
 
     public getPropertiesKeys(point: any): string[] {
-  return point?.properties ? Object.keys(point?.properties) : [];
-}
+        return point?.properties ? Object.keys(point?.properties) : [];
+    }
 
     public calculateAngle(point1, point2) {
         const [lng1, lat1] = point1;
@@ -502,8 +502,9 @@ export class MapComponent implements OnDestroy, OnInit {
             type: 'FeatureCollection',
             features: pointFeatures
         };
-        const isVisible = this.layouts['track-points-full-layer'].visibility === 'visible';
-        this.onChangesLayers('track-points-full-layer', isVisible)
+        const isVisible = this.layouts['track-points-hikvision'].visibility === 'visible';
+        this.onChangesLayers('track-points-hikvision', isVisible);
+        this.onChangesLayers('track-points-iridium', isVisible)
         this.cdr.detectChanges();
     }
 
