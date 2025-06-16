@@ -26,13 +26,13 @@ export class VehicleService {
 
         const mock: any[] = [
             { id: '22952', name: 'ID: 22952', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: true, isRepeat: true, color: '#CB0000' },
-            { id: '22216', name: 'ID: 22216', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: true, isRepeat: true, color: '#1abc9c' },
-            { id: '24121', name: 'ID: 24121', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#e74c3c' },
-            { id: '24488', name: 'ID: 24488', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#3498db' },
-            { id: '27067', name: 'ID: 27067', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#2ecc71' },
-            { id: '07322', name: 'ID: 07322', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#f39c12' },
-            { id: '07496', name: 'ID: 07496', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#9b59b6' },
-            { id: '07321', name: 'ID: 07321', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#34495e' },
+            // { id: '22216', name: 'ID: 22216', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: true, isRepeat: true, color: '#1abc9c' },
+            // { id: '24121', name: 'ID: 24121', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#e74c3c' },
+            // { id: '24488', name: 'ID: 24488', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#3498db' },
+            // { id: '27067', name: 'ID: 27067', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#2ecc71' },
+            // { id: '07322', name: 'ID: 07322', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#f39c12' },
+            // { id: '07496', name: 'ID: 07496', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#9b59b6' },
+            // { id: '07321', name: 'ID: 07321', startDateTime: formattedStart, endDateTime: formattedEnd, speed: 4, active: false, isRepeat: true, color: '#34495e' },
         ];
         return of(mock);
     }
