@@ -16,7 +16,7 @@
     >
     </map-settings-control>
     <div class="flex-fill"></div>
-  
+
     <map-zoom-control></map-zoom-control>
 
     <div class="flex-fill"></div>
@@ -59,6 +59,13 @@
       [id]="icon.name"
       [url]="icon.url"
     ></mgl-image>
+
+    <mgl-image
+      *ngFor="let icon of waypointsIcons"
+      [id]="icon.name"
+      [url]="icon.url"
+    ></mgl-image>
+
 
     <mgl-geojson-source
       *ngIf="segmentsGeoJson"
@@ -110,7 +117,7 @@
       id="track-points-full"
       [data]="pointsGeoJson"
     ></mgl-geojson-source>
-    <mgl-layer
+    <!-- <mgl-layer
       *ngIf="pointsGeoJson"
       id="track-points-full-layer"
       (layerClick)="onLayerClick($event)"
@@ -123,8 +130,28 @@
       'circle-stroke-width': 1,
       'circle-stroke-color': '#007bff'
     }"
-    ></mgl-layer>
+    ></mgl-layer> -->
 
+
+
+   <mgl-layer
+  id="track-points-hikvision"
+  type="symbol"
+  source="track-points-full"
+  (layerClick)="onLayerClick($event)"
+  [filter]="['==', ['get', 'priority'], 1]"
+  [layout]="layouts['track-points-hikvision']"
+></mgl-layer>
+
+<!-- triangle (iridium) -->
+<mgl-layer
+  id="track-points-iridium"
+  type="symbol"
+  source="track-points-full"
+  (layerClick)="onLayerClick($event)"
+  [filter]="['==', ['get', 'priority'], 2]"
+  [layout]="layouts['track-points-iridium']"
+></mgl-layer>
     <!-- Event icons -->
     <mgl-geojson-source
       *ngIf="eventsGeoJson"
@@ -179,16 +206,23 @@
             <i class="pi pi-times text-xl"></i>
           </button>
 
-           <div class="flex items-center">
+          <div class="flex items-center">
             <span class="font-semibold w-25">Coordinates:</span>
             <span>{{ selectedPoint?._geometry?.coordinates }}</span>
           </div>
-          <div class="flex items-center">
+
+          <ng-container *ngFor="let key of getPropertiesKeys(selectedPoint)">
+        <div class="flex items-center">
+          <span class="font-semibold w-28 capitalize">{{ key }}:</span>
+          <span>{{ selectedPoint?.properties?.[key] ?? '-' }}</span>
+        </div>
+      </ng-container>
+          <!-- <div class="flex items-center">
             <span class="font-semibold w-24">Altitude:</span>
             <span>{{ selectedPoint?.properties?.altitude ||'-' }}</span>
-          </div>
+          </div> -->
 
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <span class="font-semibold w-28">Direct angle:</span>
             <span>{{ selectedPoint?.properties?.direct_angle ||'-'}}</span>
           </div>
@@ -221,7 +255,9 @@
           <div class="flex items-center">
             <span class="font-semibold w-24">Water Up:</span>
             <span>{{ selectedPoint?.properties?.waterup }}</span>
-          </div>
+          </div> -->
+
+          
         </div>
 
       </div>

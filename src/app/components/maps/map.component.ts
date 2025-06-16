@@ -81,6 +81,18 @@ export class MapComponent implements OnDestroy, OnInit {
         'track-path-layer': { visibility: 'visible', 'line-join': 'round', 'line-cap': 'round' },
         'track-points-full-layer': { visibility: 'none' },
         'events-layer': { visibility: 'visible' },
+        'track-points-hikvision': {
+            visibility: 'none',
+            'icon-allow-overlap': true,
+            'icon-size': 0.25,
+            'icon-image': 'square'
+        },
+        'track-points-iridium': {
+            visibility: 'none',
+            'icon-allow-overlap': true,
+            'icon-size': 0.25,
+            'icon-image': 'triangle'
+        }
     };
 
     public segmentsGeoJson: FeatureCollection<LineString> | null = null;
@@ -93,6 +105,11 @@ export class MapComponent implements OnDestroy, OnInit {
         { name: 'landing', url: 'assets/icons/landing.png' },
         { name: 'drop', url: 'assets/icons/drop.png' },
         { name: 'get', url: 'assets/icons/get.png' }
+    ];
+
+    public waypointsIcons = [
+        { name: 'square', url: 'assets/icons/square.png' },
+        { name: 'triangle', url: 'assets/icons/triangle.png' },
     ];
 
     public modelScenegraphUrl = 'assets/models/test.glb';
@@ -151,6 +168,10 @@ export class MapComponent implements OnDestroy, OnInit {
             )
             .subscribe();
     }
+
+    public getPropertiesKeys(point: any): string[] {
+  return point?.properties ? Object.keys(point?.properties) : [];
+}
 
     public calculateAngle(point1, point2) {
         const [lng1, lat1] = point1;
@@ -621,10 +642,23 @@ export class MapComponent implements OnDestroy, OnInit {
 
     public onChangesLayers(code: string, visible: boolean): void {
         const visibility: 'visible' | 'none' = visible ? 'visible' : 'none';
-        this.layouts[code] = {
-            ...this.layouts[code],
-            visibility
-        };
+        if (code === 'track-points-full-layer') {
+            ['track-points-hikvision', 'track-points-iridium'].forEach((subLayer) => {
+                if (this.layouts[subLayer]) {
+                    this.layouts[subLayer] = {
+                        ...this.layouts[subLayer],
+                        visibility
+                    };
+                }
+            });
+        } else {
+            if (this.layouts[code]) {
+                this.layouts[code] = {
+                    ...this.layouts[code],
+                    visibility
+                };
+            }
+        }
     }
 
     public getBounds(coordinates: any): any {
