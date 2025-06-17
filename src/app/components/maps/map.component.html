@@ -54,7 +54,25 @@
     [center]="mapOptions.center"
   >
 
-    <mgl-image
+  
+
+     <mgl-geojson-source
+      *ngIf="pointsGeoJson"
+      id="track-points-full"
+      [data]="pointsGeoJson"
+    ></mgl-geojson-source>
+
+    <mgl-layer
+      *ngIf="pointsGeoJson"
+      id="track-points-hikvision"
+      type="symbol"
+      source="track-points-full"
+      (layerClick)="onLayerClick($event)"
+      [filter]="['==', ['get', 'priority'], 1]"
+      [layout]="layouts['track-points-hikvision']"
+    ></mgl-layer>
+
+      <mgl-image
       *ngFor="let icon of eventIcons"
       [id]="icon.name"
       [url]="icon.url"
@@ -66,17 +84,30 @@
       [url]="icon.url"
     ></mgl-image>
 
+    <!-- triangle (iridium) -->
+    <mgl-layer
+      *ngIf="pointsGeoJson"
+      id="track-points-iridium"
+      type="symbol"
+      source="track-points-full"
+      (layerClick)="onLayerClick($event)"
+      [filter]="['==', ['get', 'priority'], 2]"
+      [layout]="layouts['track-points-iridium']"
+    ></mgl-layer>
+
 
     <mgl-geojson-source
       *ngIf="segmentsGeoJson"
       id="track-path"
       [data]="segmentsGeoJson"
     ></mgl-geojson-source>
+
     <mgl-layer
       *ngIf="segmentsGeoJson"
       id="track-path-layer"
       type="line"
       source="track-path"
+       [before]="'track-points-hikvision'"
       [layout]="layouts['track-path-layer']"
       [paint]="{
     'line-width': 4,
@@ -89,6 +120,7 @@
       300, '#0000FF',  
       400, '#00BFFF'  
     ]
+    
   }"
     ></mgl-layer>
 
@@ -112,11 +144,7 @@
     ></mgl-layer>
 
     <!-- Full track points -->
-    <mgl-geojson-source
-      *ngIf="pointsGeoJson"
-      id="track-points-full"
-      [data]="pointsGeoJson"
-    ></mgl-geojson-source>
+   
     <!-- <mgl-layer
       *ngIf="pointsGeoJson"
       id="track-points-full-layer"
@@ -134,26 +162,7 @@
 
 
 
-    <mgl-layer
-      *ngIf="pointsGeoJson"
-      id="track-points-hikvision"
-      type="symbol"
-      source="track-points-full"
-      (layerClick)="onLayerClick($event)"
-      [filter]="['==', ['get', 'priority'], 1]"
-      [layout]="layouts['track-points-hikvision']"
-    ></mgl-layer>
-
-    <!-- triangle (iridium) -->
-    <mgl-layer
-      *ngIf="pointsGeoJson"
-      id="track-points-iridium"
-      type="symbol"
-      source="track-points-full"
-      (layerClick)="onLayerClick($event)"
-      [filter]="['==', ['get', 'priority'], 2]"
-      [layout]="layouts['track-points-iridium']"
-    ></mgl-layer>
+    
 
     <!-- Event icons -->
     <mgl-geojson-source

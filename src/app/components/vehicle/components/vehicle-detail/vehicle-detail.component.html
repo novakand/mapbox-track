@@ -96,7 +96,7 @@
                             <span class="font-semibold">{{ 'speed'    | translate }}</span>
                             <span class="font-semibold">
                                 {{ data.speed != null
-                                ? ((data.speed * 3.6) | number:'1.0-1') + ' km/h'
+                                ? ((data.speed) | number:'1.0-1') + ' km/h'
                                 : '–'
                                 }}
                             </span>

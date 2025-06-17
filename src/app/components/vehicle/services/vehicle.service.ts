@@ -16,6 +16,7 @@ export class VehicleService {
 
     ) {
 
+       // this.startFakeTrack('22952');
     }
 
     public findAll(): Observable<IVehicle[]> {
@@ -52,7 +53,6 @@ export class VehicleService {
         isRepeat = false
     ) {
         return defer(() => {
-            // если повтор — вычисляем now и начало дня
             const now = new Date();
             const isoNow = now.toISOString().split('.')[0] + 'Z';
             const midnight = new Date(now);
