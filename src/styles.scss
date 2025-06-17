@@ -704,7 +704,7 @@ mgl-map {
 .layout-map-overlay-active .layout-map-container .layout-map-sidebar {
   z-index: 99;
   left: 0;
-  width: 25rem;
+  width: 19rem;
   height: 100vh;
   background: var(--ground-background);
   opacity: 1;
@@ -713,11 +713,11 @@ mgl-map {
 
 
 .layout-map-overlay-active .layout-map-content-wrapper {
-  margin-left: 25rem;
+  margin-left: 19rem;
   position: relative;
   height: 100%;
   right: 0;
-  width: calc(100% - 25rem);
+  width: calc(100% - 19rem);
   height: 100%;
   opacity: 1;
   background: transparent;
