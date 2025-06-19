@@ -101,8 +101,8 @@ export class MapComponent implements OnDestroy, OnInit {
     public eventsGeoJson: FeatureCollection<Point> | null = null;
 
     public eventIcons = [
-        { name: 'reserved', url: 'assets/icons/reserved.png' },
-        { name: 'landing', url: 'assets/icons/landing.png' },
+        { name: 'Takeoff', url: 'assets/icons/reserved.png' },
+        { name: 'Landing', url: 'assets/icons/landing.png' },
         { name: 'drop', url: 'assets/icons/drop.png' },
         { name: 'get', url: 'assets/icons/get.png' }
     ];
