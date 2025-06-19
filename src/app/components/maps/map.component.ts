@@ -519,7 +519,7 @@ export class MapComponent implements OnDestroy, OnInit {
             const coords = f.geometry.coordinates as [number, number];
 
             if (f.properties?.['fly'] && f.properties['fly'] !== lastFly &&
-                ['reserved', 'landing'].includes(f.properties['fly'])) {
+                ['Takeoff', 'Landing'].includes(f.properties['fly'])) {
                 iconFeatures.push({
                     type: 'Feature',
                     geometry: { type: 'Point', coordinates: coords },

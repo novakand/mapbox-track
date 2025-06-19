@@ -6,6 +6,9 @@
 @import "assets/layout/styles/layout/layout.scss";
 @import 'mapbox-gl/dist/mapbox-gl.css';
 
+$gutter: 1rem;
+$autocomplete-dropdown-background: transparent !default;
+
 .p-slider {
   margin-left: 20px;
   margin-right: 20px;
