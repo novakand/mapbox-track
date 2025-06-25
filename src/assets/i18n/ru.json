@@ -2,6 +2,7 @@
   "transport": "Транспорт",
   "date": "Дата",
   "time": "Время",
+   "trackTime": "Время трека",
   "coordinates": "Координаты",
   "altitude": "Высота",
   "speed": "Скорость",

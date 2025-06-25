@@ -2,6 +2,7 @@
   "transport": "運輸",
   "date": "日期",
   "time": "時間",
+   "trackTime": "追蹤時間",
   "coordinates": "座標",
   "altitude": "海拔",
   "speed": "速度",

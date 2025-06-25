@@ -64,6 +64,17 @@
                             </span>
                         </div>
 
+                         <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-xl">{{ 'trackTime'    | translate }}</span>
+                            <span class="font-bold text-xl">
+                                {{
+                                data.timestamp && data.timestamp !== '–'
+                                ? (data.timestamp | date:'HH:mm:ss':'UTC')
+                                : '–'
+                                }}
+                            </span>
+                        </div>
+
                         <!-- Coordinates -->
                         <div class="flex justify-between items-center mb-3">
                             <span class="font-semibold">{{ 'coordinates'    | translate }}</span>

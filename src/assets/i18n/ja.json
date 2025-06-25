@@ -3,6 +3,7 @@
   "transport": "輸送",
   "date": "日付",
   "time": "時間",
+  "trackTime": "時間を追跡",
   "coordinates": "座標",
   "altitude": "高度",
   "speed": "速度",

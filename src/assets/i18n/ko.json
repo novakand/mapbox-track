@@ -3,6 +3,7 @@
   "transport": "운송",
   "date": "날짜",
   "time": "시간",
+   "trackTime": "시간 추적",
   "coordinates": "좌표",
   "altitude": "고도",
   "speed": "속도",

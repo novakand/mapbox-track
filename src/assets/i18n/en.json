@@ -2,6 +2,7 @@
   "transport": "Transport",
   "date": "Date",
   "time": "Time",
+  "trackTime": "Track time",
   "coordinates": "Coordinates",
   "altitude": "Altitude",
   "speed": "Speed",

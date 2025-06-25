@@ -3,6 +3,7 @@
   "transport": "Trasporto",
   "date": "Data",
   "time": "Ora",
+   "trackTime": "Traccia il tempo",
   "coordinates": "Coordinate",
   "altitude": "Altitudine",
   "speed": "Velocità",

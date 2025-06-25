@@ -2,6 +2,7 @@
   "transport": "Vận chuyển",
   "date": "Ngày",
   "time": "Giờ",
+    "trackTime": "Theo dõi thời gian",
   "coordinates": "Tọa độ",
   "altitude": "Độ cao",
   "speed": "Tốc độ",

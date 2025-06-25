@@ -2,6 +2,7 @@
   "transport": "运输",
   "date": "日期",
   "time": "时间",
+   "trackTime": "跟踪时间",
   "coordinates": "坐标",
   "altitude": "海拔",
   "speed": "速度",
