@@ -65,7 +65,7 @@
                         </div>
 
                          <div class="flex justify-between items-center mb-3">
-                            <span class="font-bold text-xl">{{ 'trackTime'    | translate }}</span>
+                            <span class="font-bold text-xl">{{ 'trackTime'    | translate }} (UTC)</span>
                             <span class="font-bold text-xl">
                                 {{
                                 data.timestamp && data.timestamp !== '–'
@@ -139,7 +139,7 @@
 
                     </div>
                     <div class="flex flex-col gap-2">
-                        <span class="block font-semibold">{{ 'history'    | translate }}</span>
+                        <span class="block font-semibold">{{ 'history'    | translate }} (Date Time UTC)</span>
                         <p-timeline
                             [value]="formFields"
                             class="w-full"
@@ -169,6 +169,7 @@
                                     [readonlyInput]="false"
                                     appendTo="body"
                                     [showTime]="true"
+                                     [dateFormat]="'dd MM yy'"
                                     [hourFormat]="'24'"
                                     inputId="date"
                                 >
