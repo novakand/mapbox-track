@@ -508,7 +508,7 @@ export class MapComponent implements OnDestroy, OnInit {
         this.cdr.detectChanges();
     }
 
-    private _buildEvents(
+   private _buildEvents(
         features: Feature<Point, GeoJsonProperties>[]
     ): void {
         const iconFeatures: Feature<Point, GeoJsonProperties>[] = [];
@@ -552,6 +552,8 @@ export class MapComponent implements OnDestroy, OnInit {
             features: iconFeatures
         };
     }
+
+
 
 
     private _applyFitBounds(pts: Feature<Point>[]): void {

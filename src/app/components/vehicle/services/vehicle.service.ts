@@ -16,7 +16,7 @@ export class VehicleService {
 
     ) {
 
-       // this.startFakeTrack('22952');
+      //  this.startFakeTrack('22952');
     }
 
     public findAll(): Observable<IVehicle[]> {
@@ -195,7 +195,7 @@ export class VehicleService {
         const direct_angle = (idx % 2 === 0) ? 0 : 90;
 
         // fly: «reserved» первые 5 точек, «landing» следующие 5, и так далее
-        const fly = (idx % 10 < 5) ? 'reserved' : 'landing';
+        const fly = (idx % 10 < 5) ? 'Takeoff' : 'Landing';
 
         // waterfall: активируется каждые 7 точек
         let waterfall = null;
