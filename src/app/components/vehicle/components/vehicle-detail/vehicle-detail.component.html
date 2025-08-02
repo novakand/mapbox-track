@@ -67,9 +67,8 @@
                         <div class="flex justify-between items-center mb-3">
                             <span class="font-bold text-xl">{{ 'trackTime' | translate }} (UTC)</span>
                             <span class="font-bold text-xl">
-                                {{
-                                data.timestamp && data.timestamp !== '–'
-                                ? (data.timestamp | date:'HH:mm:ss')
+                                {{ data.timestamp && data.timestamp !== '–'
+                                ? data.timestamp.slice(11, 19)
                                 : '–'
                                 }}
                             </span>
