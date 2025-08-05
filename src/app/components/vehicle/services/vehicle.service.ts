@@ -72,8 +72,8 @@ export class VehicleService {
             return this._http.get(`${environment.apiUri}tracking?${params.toString()}`);
         }).pipe(
             map(response => response),
-            retry({ count: 2, delay: 20000 }),
-            isRepeat ? repeat({ delay: 20000 }) : identity,
+            retry({ count: 2, delay: 15000 }),
+            isRepeat ? repeat({ delay: 15000 }) : identity,
             tap(data => this.track$.next({ vehicleId: id, data, isRepeat }))
         );
     }
